@@ -70,51 +70,21 @@
         transform: translateY(-4px) scale(1.03);
         box-shadow: 0 15px 25px rgba(12, 141, 172, 0.5);
       }
-
       .hero-section {
-        background: linear-gradient(
-          135deg,
-          var(--primary-color) 0%,
-          rgba(12, 141, 172, 0.9) 100%
-        );
         position: relative;
         overflow: hidden;
         border-bottom-left-radius: 60px;
         border-bottom-right-radius: 60px;
         padding: 60px 20px;
       }
-      .hero-section::before {
-        content: "";
-        position: absolute;
-        top: -20%;
-        left: -20%;
-        width: 140%;
-        height: 140%;
-        background: radial-gradient(
-          circle at top right,
-          rgba(21, 165, 184, 0.3) 0%,
-          transparent 70%
-        );
-        animation: rotateBg 25s linear infinite;
-      }
-      @keyframes rotateBg {
-        from {
-          transform: rotate(0deg);
-        }
-        to {
-          transform: rotate(360deg);
-        }
-      }
-
       .logo-large {
-        height: 150px; /* Aumentado para que se muestre más grande */
+        height: 150px;
         filter: brightness(0) invert(1);
         transition: transform 0.3s ease;
       }
       .logo-large:hover {
         transform: scale(1.05);
       }
-
       .title-highlight {
         background: linear-gradient(90deg, #ff9a9e 0%, #00c4cc 70%);
         -webkit-background-clip: text;
@@ -124,7 +94,6 @@
         font-weight: 800;
         text-align: center;
       }
-
       .card-service {
         background: linear-gradient(
           135deg,
@@ -145,7 +114,6 @@
         transform: translateY(-10px) scale(1.02);
         box-shadow: 0 20px 45px rgba(0, 0, 0, 0.15);
       }
-
       .sticky-header {
         position: sticky;
         top: 0;
@@ -159,7 +127,6 @@
         background: rgba(0, 46, 125, 0.9);
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
       }
-
       .testimonial {
         background: var(--glass-bg);
         backdrop-filter: blur(8px);
@@ -171,7 +138,6 @@
       .testimonial:hover {
         transform: translateY(-5px);
       }
-
       .whatsapp-btn {
         position: fixed;
         bottom: 20px;
@@ -192,7 +158,6 @@
         transform: scale(1.1);
         box-shadow: 0 6px 15px rgba(37, 211, 102, 0.5);
       }
-
       .filter-btn {
         background: var(--glass-bg);
         backdrop-filter: blur(5px);
@@ -269,7 +234,7 @@
         background-position: center;
       "
     >
-      <div class="container mx-auto px-6 relative z-10">
+      <div class="container max-w-7xl mx-auto px-6 relative z-10">
         <h1 class="title-highlight mb-6">Alianza Capacitarte</h1>
         <h2 class="text-4xl md:text-6xl font-extrabold leading-tight mb-6">
           Capacítate Rápido, Certifícate con Éxito
@@ -293,13 +258,11 @@
       </div>
     </section>
 
-   
-
     <section
       id="beneficios"
       class="py-20 bg-white relative mt-20 z-20 rounded-t-3xl"
     >
-      <div class="container mx-auto px-6">
+      <div class="container max-w-7xl mx-auto px-6">
         <h3
           class="text-3xl md:text-4xl font-extrabold text-center mb-16 text-primary"
         >
@@ -338,7 +301,7 @@
     </section>
 
     <section id="catalogo-servicios" class="py-20 bg-gray-50">
-      <div class="container mx-auto px-6">
+      <div class="container max-w-7xl mx-auto px-6">
         <h3
           class="text-4xl md:text-5xl font-extrabold text-center mb-12 text-primary"
         >
@@ -984,7 +947,7 @@
     </section>
 
     <section id="testimonios" class="py-20 bg-white">
-      <div class="container mx-auto px-6">
+      <div class="container max-w-7xl mx-auto px-6">
         <h3
           class="text-4xl md:text-5xl font-extrabold text-center mb-16 text-primary"
         >
@@ -1003,8 +966,8 @@
       </div>
     </section>
 
-     <section id="servicios-destacados" class="py-20 bg-gray-50">
-      <div class="container mx-auto px-6">
+    <section id="servicios-destacados" class="py-20 bg-gray-50">
+      <div class="container max-w-7xl mx-auto px-6">
         <h3
           class="text-4xl md:text-5xl font-extrabold text-center mb-16 text-primary"
         >
@@ -1096,8 +1059,6 @@
       </div>
     </section>
 
-
-
     <section id="ubicacion" class="bg-gray-50 pb-20">
       <div class="container mx-auto px-6">
         <h3
@@ -1121,7 +1082,7 @@
       </div>
     </section>
 
-        <section id="contacto" class="py-20 bg-white">
+    <section id="contacto" class="py-20 bg-white">
       <div class="container mx-auto px-6">
         <h3
           class="text-4xl md:text-5xl font-extrabold text-center mb-10 text-primary"
