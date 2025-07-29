@@ -77,8 +77,29 @@
         border-bottom-right-radius: 60px;
         padding: 60px 20px;
       }
+
+      .sticky-header {
+        position: sticky;
+        top: 0;
+        width: 100%;
+        z-index: 1000;
+        /* ✅ Efecto de vidrio mejorado: más transparente y con más desenfoque */
+        background: rgba(0, 46, 125, 0.5);
+        backdrop-filter: blur(12px);
+        /* ✅ Transición suave para todos los cambios */
+        transition: all 0.4s ease-in-out;
+      }
+      .sticky-header.scrolled {
+        background: rgba(0, 46, 125, 0.85);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .header-hidden {
+        transform: translateY(-100%);
+      }
       .logo-large {
-        height: 150px;
+        /* ✅ Reducimos la altura del logo para un header más compacto */
+        height: 70px;
         filter: brightness(0) invert(1);
         transition: transform 0.3s ease;
       }
@@ -170,6 +191,79 @@
       .filter-btn.active {
         background: var(--secondary-color);
         color: white;
+      }
+
+      .catalog-tab {
+        padding: 0.75rem 0.5rem;
+        margin-bottom: -1px; /* Para que el borde se alinee con el borde inferior */
+        border-bottom: 3px solid transparent;
+        font-size: 1.125rem; /* 18px */
+        font-weight: 600;
+        color: var(--text-color);
+        transition: all 0.3s ease;
+      }
+
+      .catalog-tab:hover {
+        color: var(--secondary-color);
+      }
+
+      .catalog-tab.active {
+        color: var(--primary-color);
+        border-bottom-color: var(--primary-color);
+      }
+
+      .catalog-pane {
+        display: none; /* Ocultar todos los paneles por defecto */
+        animation: fadeIn 0.5s ease;
+      }
+
+      .catalog-pane.active {
+        display: block; /* Mostrar solo el panel activo */
+      }
+
+      .service-item {
+        display: flex;
+        flex-direction: column;
+
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 0.5rem;
+        border-bottom: 1px solid #e5e7eb;
+        gap: 1rem;
+      }
+
+      @media (min-width: 768px) {
+        .service-item {
+          flex-direction: row;
+        }
+      }
+
+      .service-item:last-child {
+        border-bottom: none;
+      }
+
+      .service-details {
+        flex-grow: 1;
+        text-align: left;
+      }
+
+      .service-price {
+        font-weight: 700;
+        color: var(--secondary-color);
+        font-size: 1.125rem;
+        min-width: 150px;
+        text-align: right;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
     </style>
   </head>
@@ -305,641 +399,34 @@
         <h3
           class="text-4xl md:text-5xl font-extrabold text-center mb-12 text-primary"
         >
-          Catálogo de Compras: Cursos, Diplomados y Trámites
+          Nuestro Catálogo de Servicios
         </h3>
-        <div class="mb-6 text-center">
-          <button class="filter-btn" data-filter="all">Todos</button>
-          <button class="filter-btn" data-filter="curso">Cursos</button>
-          <button class="filter-btn" data-filter="diplomado">Diplomados</button>
-          <button class="filter-btn" data-filter="tramite">Trámites</button>
-        </div>
+
         <div
-          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10"
-          id="service-catalog"
+          id="catalog-tabs"
+          class="border-b border-gray-300 mb-8 flex justify-center space-x-4 md:space-x-8"
         >
-          <div class="card-service p-8 category-curso" data-category="curso">
-            <i class="fas fa-utensils text-5xl text-secondary mb-5"></i>
-            <h4 class="text-2xl font-bold mb-3 text-primary">
-              Curso Manipulación de Alimentos
-            </h4>
-            <p class="text-gray-600 mb-4">
-              Modalidad flexible: presencial, virtual o in-company.
-            </p>
-            <p class="text-lg font-bold text-secondary mb-4">COP 15,000.00</p>
-            <a
-              href="https://wa.me/573012307470"
-              class="btn-main w-full text-base"
-              >Comprar Ahora</a
-            >
-          </div>
-          <div class="card-service p-8 category-curso" data-category="curso">
-            <i class="fas fa-broom text-5xl text-secondary mb-5"></i>
-            <h4 class="text-2xl font-bold mb-3 text-primary">
-              Curso de Aseo y Desinfección Hospitalaria
-            </h4>
-            <p class="text-gray-600 mb-4">
-              Formación esencial para entornos sanitarios.
-            </p>
-            <p class="text-lg font-bold text-secondary mb-4">COP 30,000.00</p>
-            <a
-              href="https://wa.me/573012307470"
-              class="btn-main w-full text-base"
-              >Comprar Ahora</a
-            >
-          </div>
-          <div class="card-service p-8 category-curso" data-category="curso">
-            <i class="fas fa-helmet-safety text-5xl text-secondary mb-5"></i>
-            <h4 class="text-2xl font-bold mb-3 text-primary">
-              Curso de Trabajo Seguro en Alturas
-            </h4>
-            <p class="text-gray-600 mb-4">
-              Capacitación para seguridad laboral.
-            </p>
-            <p class="text-lg font-bold text-secondary mb-4">
-              Preguntar por el precio
-            </p>
-            <a
-              href="https://wa.me/573012307470"
-              class="btn-main w-full text-base"
-              >Consultar Precio</a
-            >
-          </div>
-          <div class="card-service p-8 category-curso" data-category="curso">
-            <i class="fas fa-car-side text-5xl text-secondary mb-5"></i>
-            <h4 class="text-2xl font-bold mb-3 text-primary">
-              Curso de Soporte Vial Básico
-            </h4>
-            <p class="text-gray-600 mb-4">
-              Entrenamiento para emergencias viales.
-            </p>
-            <p class="text-lg font-bold text-secondary mb-4">COP 70,000.00</p>
-            <a
-              href="https://wa.me/573012307470"
-              class="btn-main w-full text-base"
-              >Comprar Ahora</a
-            >
-          </div>
-          <div class="card-service p-8 category-curso" data-category="curso">
-            <i class="fas fa-seedling text-5xl text-secondary mb-5"></i>
-            <h4 class="text-2xl font-bold mb-3 text-primary">
-              Curso de Jardinería y Paisajismo
-            </h4>
-            <p class="text-gray-600 mb-4">
-              Diseño y mantenimiento de espacios verdes.
-            </p>
-            <p class="text-lg font-bold text-secondary mb-4">COP 30,000.00</p>
-            <a
-              href="https://wa.me/573012307470"
-              class="btn-main w-full text-base"
-              >Comprar Ahora</a
-            >
-          </div>
-          <div class="card-service p-8 category-curso" data-category="curso">
-            <i class="fas fa-warehouse text-5xl text-secondary mb-5"></i>
-            <h4 class="text-2xl font-bold mb-3 text-primary">
-              Auxiliar de Bodega
-            </h4>
-            <p class="text-gray-600 mb-4">
-              Capacitación para gestión de inventarios.
-            </p>
-            <p class="text-lg font-bold text-secondary mb-4">COP 30,000.00</p>
-            <a
-              href="https://wa.me/573012307470"
-              class="btn-main w-full text-base"
-              >Comprar Ahora</a
-            >
-          </div>
-          <div
-            class="card-service p-8 category-diplomado"
-            data-category="diplomado"
-          >
-            <i class="fas fa-user-md text-5xl text-secondary mb-5"></i>
-            <h4 class="text-2xl font-bold mb-3 text-primary">
-              Diplomado en Atención al Cliente
-            </h4>
-            <p class="text-gray-600 mb-4">
-              Mejora tus habilidades de servicio.
-            </p>
-            <p class="text-lg font-bold text-secondary mb-4">COP 50,000.00</p>
-            <a
-              href="https://wa.me/573012307470"
-              class="btn-main w-full text-base"
-              >Comprar Ahora</a
-            >
-          </div>
-          <div
-            class="card-service p-8 category-diplomado"
-            data-category="diplomado"
-          >
-            <i
-              class="fas fa-hand-holding-heart text-5xl text-secondary mb-5"
-            ></i>
-            <h4 class="text-2xl font-bold mb-3 text-primary">
-              Diplomado Cuidado Integral al Adulto Mayor
-            </h4>
-            <p class="text-gray-600 mb-4">
-              Formación para el bienestar de mayores.
-            </p>
-            <p class="text-lg font-bold text-secondary mb-4">COP 50,000.00</p>
-            <a
-              href="https://wa.me/573012307470"
-              class="btn-main w-full text-base"
-              >Comprar Ahora</a
-            >
-          </div>
-          <div
-            class="card-service p-8 category-diplomado"
-            data-category="diplomado"
-          >
-            <i class="fas fa-first-aid text-5xl text-secondary mb-5"></i>
-            <h4 class="text-2xl font-bold mb-3 text-primary">
-              Diplomado en Primeros Auxilios
-            </h4>
-            <p class="text-gray-600 mb-4">
-              Prepárate para emergencias médicas.
-            </p>
-            <p class="text-lg font-bold text-secondary mb-4">COP 50,000.00</p>
-            <a
-              href="https://wa.me/573012307470"
-              class="btn-main w-full text-base"
-              >Comprar Ahora</a
-            >
-          </div>
-          <div
-            class="card-service p-8 category-diplomado"
-            data-category="diplomado"
-          >
-            <i class="fas fa-shield-virus text-5xl text-secondary mb-5"></i>
-            <h4 class="text-2xl font-bold mb-3 text-primary">
-              Diplomado en Bioseguridad y Residuos Peligrosos
-            </h4>
-            <p class="text-gray-600 mb-4">Capacitación en manejo seguro.</p>
-            <p class="text-lg font-bold text-secondary mb-4">COP 50,000.00</p>
-            <a
-              href="https://wa.me/573012307470"
-              class="btn-main w-full text-base"
-              >Comprar Ahora</a
-            >
-          </div>
-          <div
-            class="card-service p-8 category-diplomado"
-            data-category="diplomado"
-          >
-            <i class="fas fa-stethoscope text-5xl text-secondary mb-5"></i>
-            <h4 class="text-2xl font-bold mb-3 text-primary">
-              Diplomado de Camillero
-            </h4>
-            <p class="text-gray-600 mb-4">Formación para asistencia médica.</p>
-            <p class="text-lg font-bold text-secondary mb-4">COP 50,000.00</p>
-            <a
-              href="https://wa.me/573012307470"
-              class="btn-main w-full text-base"
-              >Comprar Ahora</a
-            >
-          </div>
-          <div
-            class="card-service p-8 category-diplomado"
-            data-category="diplomado"
-          >
-            <i class="fas fa-shield-alt text-5xl text-secondary mb-5"></i>
-            <h4 class="text-2xl font-bold mb-3 text-primary">
-              Diplomado de Seguridad en el Paciente
-            </h4>
-            <p class="text-gray-600 mb-4">Protección en entornos sanitarios.</p>
-            <p class="text-lg font-bold text-secondary mb-4">COP 50,000.00</p>
-            <a
-              href="https://wa.me/573012307470"
-              class="btn-main w-full text-base"
-              >Comprar Ahora</a
-            >
-          </div>
-          <div
-            class="card-service p-8 category-diplomado"
-            data-category="diplomado"
-          >
-            <i class="fas fa-syringe text-5xl text-secondary mb-5"></i>
-            <h4 class="text-2xl font-bold mb-3 text-primary">
-              Diplomado de Inyectología
-            </h4>
-            <p class="text-gray-600 mb-4">
-              Técnicas de administración de inyecciones.
-            </p>
-            <p class="text-lg font-bold text-secondary mb-4">COP 70,000.00</p>
-            <a
-              href="https://wa.me/573012307470"
-              class="btn-main w-full text-base"
-              >Comprar Ahora</a
-            >
-          </div>
-          <div
-            class="card-service p-8 category-diplomado"
-            data-category="diplomado"
-          >
-            <i class="fas fa-vial text-5xl text-secondary mb-5"></i>
-            <h4 class="text-2xl font-bold mb-3 text-primary">
-              Diplomado en Toma de Muestras de Laboratorio
-            </h4>
-            <p class="text-gray-600 mb-4">
-              Procedimientos de laboratorio básico.
-            </p>
-            <p class="text-lg font-bold text-secondary mb-4">COP 50,000.00</p>
-            <a
-              href="https://wa.me/573012307470"
-              class="btn-main w-full text-base"
-              >Comprar Ahora</a
-            >
-          </div>
-          <div
-            class="card-service p-8 category-diplomado"
-            data-category="diplomado"
-          >
-            <i class="fas fa-pills text-5xl text-secondary mb-5"></i>
-            <h4 class="text-2xl font-bold mb-3 text-primary">
-              Diplomado en Farmacología
-            </h4>
-            <p class="text-gray-600 mb-4">Conocimientos sobre medicamentos.</p>
-            <p class="text-lg font-bold text-secondary mb-4">COP 50,000.00</p>
-            <a
-              href="https://wa.me/573012307470"
-              class="btn-main w-full text-base"
-              >Comprar Ahora</a
-            >
-          </div>
-          <div
-            class="card-service p-8 category-diplomado"
-            data-category="diplomado"
-          >
-            <i class="fas fa-hat-chef text-5xl text-secondary mb-5"></i>
-            <h4 class="text-2xl font-bold mb-3 text-primary">
-              Diplomado en Jefe de Cocina
-            </h4>
-            <p class="text-gray-600 mb-4">
-              Liderazgo culinario con carnet incluido.
-            </p>
-            <p class="text-lg font-bold text-secondary mb-4">COP 50,000.00</p>
-            <a
-              href="https://wa.me/573012307470"
-              class="btn-main w-full text-base"
-              >Comprar Ahora</a
-            >
-          </div>
-          <div
-            class="card-service p-8 category-diplomado"
-            data-category="diplomado"
-          >
-            <i class="fas fa-utensils text-5xl text-secondary mb-5"></i>
-            <h4 class="text-2xl font-bold mb-3 text-primary">
-              Diplomado Auxiliar en Cocina
-            </h4>
-            <p class="text-gray-600 mb-4">Apoyo en preparación culinaria.</p>
-            <p class="text-lg font-bold text-secondary mb-4">COP 50,000.00</p>
-            <a
-              href="https://wa.me/573012307470"
-              class="btn-main w-full text-base"
-              >Comprar Ahora</a
-            >
-          </div>
-          <div
-            class="card-service p-8 category-diplomado"
-            data-category="diplomado"
-          >
-            <i class="fas fa-shield-alt text-5xl text-secondary mb-5"></i>
-            <h4 class="text-2xl font-bold mb-3 text-primary">
-              Diplomado en Código Fucsia
-            </h4>
-            <p class="text-gray-600 mb-4">
-              Seguridad en emergencias hospitalarias.
-            </p>
-            <p class="text-lg font-bold text-secondary mb-4">COP 50,000.00</p>
-            <a
-              href="https://wa.me/573012307470"
-              class="btn-main w-full text-base"
-              >Comprar Ahora</a
-            >
-          </div>
-          <div
-            class="card-service p-8 category-diplomado"
-            data-category="diplomado"
-          >
-            <i class="fas fa-syringe text-5xl text-secondary mb-5"></i>
-            <h4 class="text-2xl font-bold mb-3 text-primary">
-              Diplomado en Vacunación
-            </h4>
-            <p class="text-gray-600 mb-4">Técnicas de aplicación de vacunas.</p>
-            <p class="text-lg font-bold text-secondary mb-4">COP 50,000.00</p>
-            <a
-              href="https://wa.me/573012307470"
-              class="btn-main w-full text-base"
-              >Comprar Ahora</a
-            >
-          </div>
-          <div
-            class="card-service p-8 category-diplomado"
-            data-category="diplomado"
-          >
-            <i class="fas fa-user-md text-5xl text-secondary mb-5"></i>
-            <h4 class="text-2xl font-bold mb-3 text-primary">
-              Diplomado en AEIP
-            </h4>
-            <p class="text-gray-600 mb-4">
-              Atención e intervención psicológica.
-            </p>
-            <p class="text-lg font-bold text-secondary mb-4">COP 50,000.00</p>
-            <a
-              href="https://wa.me/573012307470"
-              class="btn-main w-full text-base"
-              >Comprar Ahora</a
-            >
-          </div>
-          <div
-            class="card-service p-8 category-diplomado"
-            data-category="diplomado"
-          >
-            <i class="fas fa-notes-medical text-5xl text-secondary mb-5"></i>
-            <h4 class="text-2xl font-bold mb-3 text-primary">
-              Diplomado en Cuidados Básicos de Enfermería
-            </h4>
-            <p class="text-gray-600 mb-4">Fundamentos de atención sanitaria.</p>
-            <p class="text-lg font-bold text-secondary mb-4">COP 50,000.00</p>
-            <a
-              href="https://wa.me/573012307470"
-              class="btn-main w-full text-base"
-              >Comprar Ahora</a
-            >
-          </div>
-          <div
-            class="card-service p-8 category-diplomado"
-            data-category="diplomado"
-          >
-            <i class="fas fa-heartbeat text-5xl text-secondary mb-5"></i>
-            <h4 class="text-2xl font-bold mb-3 text-primary">
-              Diplomado en Salud Reproductiva
-            </h4>
-            <p class="text-gray-600 mb-4">Educación y cuidado reproductivo.</p>
-            <p class="text-lg font-bold text-secondary mb-4">COP 50,000.00</p>
-            <a
-              href="https://wa.me/573012307470"
-              class="btn-main w-full text-base"
-              >Comprar Ahora</a
-            >
-          </div>
-          <div
-            class="card-service p-8 category-diplomado"
-            data-category="diplomado"
-          >
-            <i class="fas fa-wheelchair text-5xl text-secondary mb-5"></i>
-            <h4 class="text-2xl font-bold mb-3 text-primary">
-              Diplomado en Atención a Personas con Discapacidad
-            </h4>
-            <p class="text-gray-600 mb-4">Apoyo especializado y atención.</p>
-            <p class="text-lg font-bold text-secondary mb-4">COP 50,000.00</p>
-            <a
-              href="https://wa.me/573012307470"
-              class="btn-main w-full text-base"
-              >Comprar Ahora</a
-            >
-          </div>
-          <div
-            class="card-service p-8 category-diplomado"
-            data-category="diplomado"
-          >
-            <i class="fas fa-shield-alt text-5xl text-secondary mb-5"></i>
-            <h4 class="text-2xl font-bold mb-3 text-primary">
-              Diplomado en Prevención y Protección de la Salud
-            </h4>
-            <p class="text-gray-600 mb-4">Estrategias de salud preventiva.</p>
-            <p class="text-lg font-bold text-secondary mb-4">COP 50,000.00</p>
-            <a
-              href="https://wa.me/573012307470"
-              class="btn-main w-full text-base"
-              >Comprar Ahora</a
-            >
-          </div>
-          <div
-            class="card-service p-8 category-diplomado"
-            data-category="diplomado"
-          >
-            <i class="fas fa-pills text-5xl text-secondary mb-5"></i>
-            <h4 class="text-2xl font-bold mb-3 text-primary">
-              Diplomado en Farmacovigilancia
-            </h4>
-            <p class="text-gray-600 mb-4">
-              Monitoreo de efectos de medicamentos.
-            </p>
-            <p class="text-lg font-bold text-secondary mb-4">COP 50,000.00</p>
-            <a
-              href="https://wa.me/573012307470"
-              class="btn-main w-full text-base"
-              >Comprar Ahora</a
-            >
-          </div>
-          <div
-            class="card-service p-8 category-diplomado"
-            data-category="diplomado"
-          >
-            <i class="fas fa-wheelchair text-5xl text-secondary mb-5"></i>
-            <h4 class="text-2xl font-bold mb-3 text-primary">
-              Auxiliar en Rehabilitación Física
-            </h4>
-            <p class="text-gray-600 mb-4">
-              Apoyo en terapias de rehabilitación.
-            </p>
-            <p class="text-lg font-bold text-secondary mb-4">COP 150,000.00</p>
-            <a
-              href="https://wa.me/573012307470"
-              class="btn-main w-full text-base"
-              >Comprar Ahora</a
-            >
-          </div>
-          <div
-            class="card-service p-8 category-diplomado"
-            data-category="diplomado"
-          >
-            <i class="fas fa-graduation-cap text-5xl text-secondary mb-5"></i>
-            <h4 class="text-2xl font-bold mb-3 text-primary">
-              Programas Técnicos Laborales
-            </h4>
-            <p class="text-gray-600 mb-4">Formación técnica completa.</p>
-            <p class="text-lg font-bold text-secondary mb-4">
-              COP 600,000.00 (Consultar mensualidades)
-            </p>
-            <a
-              href="https://wa.me/573012307470"
-              class="btn-main w-full text-base"
-              >Consultar Plan</a
-            >
-          </div>
-          <div
-            class="card-service p-8 category-tramite"
-            data-category="tramite"
-          >
-            <i class="fas fa-file-alt text-5xl text-secondary mb-5"></i>
-            <h4 class="text-2xl font-bold mb-3 text-primary">Hoja de Vida</h4>
-            <p class="text-gray-600 mb-4">Elaboración profesional de tu CV.</p>
-            <p class="text-lg font-bold text-secondary mb-4">COP 30,000.00</p>
-            <a
-              href="https://wa.me/573012307470"
-              class="btn-main w-full text-base"
-              >Comprar Ahora</a
-            >
-          </div>
-          <div
-            class="card-service p-8 category-tramite"
-            data-category="tramite"
-          >
-            <i class="fas fa-passport text-5xl text-secondary mb-5"></i>
-            <h4 class="text-2xl font-bold mb-3 text-primary">
-              Trámite de Cita para Pasaporte
-            </h4>
-            <p class="text-gray-600 mb-4">Gestión ágil de citas.</p>
-            <p class="text-lg font-bold text-secondary mb-4">COP 30,000.00</p>
-            <a
-              href="https://wa.me/573012307470"
-              class="btn-main w-full text-base"
-              >Comprar Ahora</a
-            >
-          </div>
-          <div
-            class="card-service p-8 category-tramite"
-            data-category="tramite"
-          >
-            <i class="fas fa-file-invoice text-5xl text-secondary mb-5"></i>
-            <h4 class="text-2xl font-bold mb-3 text-primary">
-              Trámite de RUT en la DIAN
-            </h4>
-            <p class="text-gray-600 mb-4">Registro tributario nacional.</p>
-            <p class="text-lg font-bold text-secondary mb-4">
-              Preguntar por el precio
-            </p>
-            <a
-              href="https://wa.me/573012307470"
-              class="btn-main w-full text-base"
-              >Consultar Precio</a
-            >
-          </div>
-          <div
-            class="card-service p-8 category-tramite"
-            data-category="tramite"
-          >
-            <i class="fas fa-university text-5xl text-secondary mb-5"></i>
-            <h4 class="text-2xl font-bold mb-3 text-primary">
-              Trámite de Apertura de Cuenta Bancaria
-            </h4>
-            <p class="text-gray-600 mb-4">Asesoría para colombianos.</p>
-            <p class="text-lg font-bold text-secondary mb-4">COP 50,000.00</p>
-            <a
-              href="https://wa.me/573012307470"
-              class="btn-main w-full text-base"
-              >Comprar Ahora</a
-            >
-          </div>
-          <div
-            class="card-service p-8 category-tramite"
-            data-category="tramite"
-          >
-            <i class="fas fa-camera text-5xl text-secondary mb-5"></i>
-            <h4 class="text-2xl font-bold mb-3 text-primary">
-              Trámite de Cámara de Comercio
-            </h4>
-            <p class="text-gray-600 mb-4">Registro empresarial.</p>
-            <p class="text-lg font-bold text-secondary mb-4">
-              Preguntar por el precio
-            </p>
-            <a
-              href="https://wa.me/573012307470"
-              class="btn-main w-full text-base"
-              >Consultar Precio</a
-            >
-          </div>
-          <div
-            class="card-service p-8 category-tramite"
-            data-category="tramite"
-          >
-            <i class="fas fa-file-signature text-5xl text-secondary mb-5"></i>
-            <h4 class="text-2xl font-bold mb-3 text-primary">
-              Trámite de Apostilla y Legalización
-            </h4>
-            <p class="text-gray-600 mb-4">Legalización de documentos.</p>
-            <p class="text-lg font-bold text-secondary mb-4">
-              Preguntar por el precio
-            </p>
-            <a
-              href="https://wa.me/573012307470"
-              class="btn-main w-full text-base"
-              >Consultar Precio</a
-            >
-          </div>
-          <div
-            class="card-service p-8 category-tramite"
-            data-category="tramite"
-          >
-            <i class="fas fa-bug text-5xl text-secondary mb-5"></i>
-            <h4 class="text-2xl font-bold mb-3 text-primary">
-              Certificado de Fumigación
-            </h4>
-            <p class="text-gray-600 mb-4">Para vehículos de transporte.</p>
-            <p class="text-lg font-bold text-secondary mb-4">COP 30,000.00</p>
-            <a
-              href="https://wa.me/573012307470"
-              class="btn-main w-full text-base"
-              >Comprar Ahora</a
-            >
-          </div>
-          <div
-            class="card-service p-8 category-tramite"
-            data-category="tramite"
-          >
-            <i class="fas fa-balance-scale text-5xl text-secondary mb-5"></i>
-            <h4 class="text-2xl font-bold mb-3 text-primary">
-              Trámite de Procuraduría, Contraloría y Policía Nacional
-            </h4>
-            <p class="text-gray-600 mb-4">Gestión de certificados oficiales.</p>
-            <p class="text-lg font-bold text-secondary mb-4">COP 30,000.00</p>
-            <a
-              href="https://wa.me/573012307470"
-              class="btn-main w-full text-base"
-              >Comprar Ahora</a
-            >
-          </div>
-          <div
-            class="card-service p-8 category-tramite"
-            data-category="tramite"
-          >
-            <i class="fas fa-stethoscope text-5xl text-secondary mb-5"></i>
-            <h4 class="text-2xl font-bold mb-3 text-primary">
-              Exámenes Médicos Laborales
-            </h4>
-            <p class="text-gray-600 mb-4">Evaluaciones de salud ocupacional.</p>
-            <p class="text-lg font-bold text-secondary mb-4">
-              Preguntar por el precio
-            </p>
-            <a
-              href="https://wa.me/573012307470"
-              class="btn-main w-full text-base"
-              >Consultar Precio</a
-            >
-          </div>
-          <div
-            class="card-service p-8 category-tramite"
-            data-category="tramite"
-          >
-            <i class="fas fa-graduation-cap text-5xl text-secondary mb-5"></i>
-            <h4 class="text-2xl font-bold mb-3 text-primary">
-              Validación de Bachillerato
-            </h4>
-            <p class="text-gray-600 mb-4">Legalización en 3 meses.</p>
-            <p class="text-lg font-bold text-secondary mb-4">
-              COP 500,000.00 (Consultar mensualidades)
-            </p>
-            <a
-              href="https://wa.me/573012307470"
-              class="btn-main w-full text-base"
-              >Consultar Plan</a
-            >
-          </div>
+          <button class="catalog-tab active" data-tab="todos">Todos</button>
+          <button class="catalog-tab" data-tab="cursos">Cursos</button>
+          <button class="catalog-tab" data-tab="diplomados">Diplomados</button>
+          <button class="catalog-tab" data-tab="tramites">Trámites</button>
         </div>
+
+        <div
+          id="catalog-content"
+          class="bg-white p-6 md:p-10 rounded-2xl shadow-xl border border-gray-100"
+        >
+          <div class="catalog-pane active" data-pane="todos"></div>
+          <div class="catalog-pane" data-pane="cursos"></div>
+          <div class="catalog-pane" data-pane="diplomados"></div>
+          <div class="catalog-pane" data-pane="tramites"></div>
+        </div>
+
         <div class="text-center mt-16">
-          <a href="https://wa.me/573012307470" class="btn-main text-lg">
+          <a
+            href="https://wa.me/573012307470?text=Hola,%20quisiera%20personalizar%20una%20compra."
+            class="btn-main text-lg"
+          >
             Personaliza Tu Compra <i class="fas fa-question-circle ml-2"></i>
           </a>
         </div>
@@ -1144,6 +631,329 @@
     <script>
       // Envolvemos todo en un listener para asegurar que la página esté completamente cargada
       document.addEventListener("DOMContentLoaded", function () {
+        // ===== INICIO: LÓGICA PARA NUEVO CATÁLOGO POR PESTAÑAS (VERSIÓN COMPLETA) =====
+        const services = [
+          // Cursos
+          {
+            name: "Curso Manipulación de Alimentos",
+            category: "cursos",
+            price: "COP 15,000.00",
+            wa_link: "https://wa.me/573012307470",
+          },
+          {
+            name: "Curso de Aseo y Desinfección Hospitalaria",
+            category: "cursos",
+            price: "COP 30,000.00",
+            wa_link: "https://wa.me/573012307470",
+          },
+          {
+            name: "Curso de Trabajo Seguro en Alturas",
+            category: "cursos",
+            price: "Consultar",
+            wa_link: "https://wa.me/573012307470",
+          },
+          {
+            name: "Curso de Soporte Vial Básico",
+            category: "cursos",
+            price: "COP 70,000.00",
+            wa_link: "https://wa.me/573012307470",
+          },
+          {
+            name: "Curso de Jardinería y Paisajismo",
+            category: "cursos",
+            price: "COP 30,000.00",
+            wa_link: "https://wa.me/573012307470",
+          },
+          {
+            name: "Auxiliar de Bodega",
+            category: "cursos",
+            price: "COP 30,000.00",
+            wa_link: "https://wa.me/573012307470",
+          },
+
+          // Diplomados
+          {
+            name: "Diplomado en Atención al Cliente",
+            category: "diplomados",
+            price: "COP 50,000.00",
+            wa_link: "https://wa.me/573012307470",
+          },
+          {
+            name: "Diplomado Cuidado Integral al Adulto Mayor",
+            category: "diplomados",
+            price: "COP 50,000.00",
+            wa_link: "https://wa.me/573012307470",
+          },
+          {
+            name: "Diplomado en Primeros Auxilios",
+            category: "diplomados",
+            price: "COP 50,000.00",
+            wa_link: "https://wa.me/573012307470",
+          },
+          {
+            name: "Diplomado en Bioseguridad y Residuos Peligrosos",
+            category: "diplomados",
+            price: "COP 50,000.00",
+            wa_link: "https://wa.me/573012307470",
+          },
+          {
+            name: "Diplomado de Camillero",
+            category: "diplomados",
+            price: "COP 50,000.00",
+            wa_link: "https://wa.me/573012307470",
+          },
+          {
+            name: "Diplomado de Seguridad en el Paciente",
+            category: "diplomados",
+            price: "COP 50,000.00",
+            wa_link: "https://wa.me/573012307470",
+          },
+          {
+            name: "Diplomado de Inyectología",
+            category: "diplomados",
+            price: "COP 70,000.00",
+            wa_link: "https://wa.me/573012307470",
+          },
+          {
+            name: "Diplomado en Toma de Muestras de Laboratorio",
+            category: "diplomados",
+            price: "COP 50,000.00",
+            wa_link: "https://wa.me/573012307470",
+          },
+          {
+            name: "Diplomado en Farmacología",
+            category: "diplomados",
+            price: "COP 50,000.00",
+            wa_link: "https://wa.me/573012307470",
+          },
+          {
+            name: "Diplomado en Jefe de Cocina",
+            category: "diplomados",
+            price: "COP 50,000.00",
+            wa_link: "https://wa.me/573012307470",
+          },
+          {
+            name: "Diplomado Auxiliar en Cocina",
+            category: "diplomados",
+            price: "COP 50,000.00",
+            wa_link: "https://wa.me/573012307470",
+          },
+          {
+            name: "Diplomado en Código Fucsia",
+            category: "diplomados",
+            price: "COP 50,000.00",
+            wa_link: "https://wa.me/573012307470",
+          },
+          {
+            name: "Diplomado en Vacunación",
+            category: "diplomados",
+            price: "COP 50,000.00",
+            wa_link: "https://wa.me/573012307470",
+          },
+          {
+            name: "Diplomado en AEIP",
+            category: "diplomados",
+            price: "COP 50,000.00",
+            wa_link: "https://wa.me/573012307470",
+          },
+          {
+            name: "Diplomado en Cuidados Básicos de Enfermería",
+            category: "diplomados",
+            price: "COP 50,000.00",
+            wa_link: "https://wa.me/573012307470",
+          },
+          {
+            name: "Diplomado en Salud Reproductiva",
+            category: "diplomados",
+            price: "COP 50,000.00",
+            wa_link: "https://wa.me/573012307470",
+          },
+          {
+            name: "Diplomado en Atención a Personas con Discapacidad",
+            category: "diplomados",
+            price: "COP 50,000.00",
+            wa_link: "https://wa.me/573012307470",
+          },
+          {
+            name: "Diplomado en Prevención y Protección de la Salud",
+            category: "diplomados",
+            price: "COP 50,000.00",
+            wa_link: "https://wa.me/573012307470",
+          },
+          {
+            name: "Diplomado en Farmacovigilancia",
+            category: "diplomados",
+            price: "COP 50,000.00",
+            wa_link: "https://wa.me/573012307470",
+          },
+          {
+            name: "Auxiliar en Rehabilitación Física",
+            category: "diplomados",
+            price: "COP 150,000.00",
+            wa_link: "https://wa.me/573012307470",
+          },
+          {
+            name: "Programas Técnicos Laborales",
+            category: "diplomados",
+            price: "COP 600,000.00",
+            wa_link: "https://wa.me/573012307470",
+          },
+
+          // Trámites
+          {
+            name: "Hoja de Vida",
+            category: "tramites",
+            price: "COP 30,000.00",
+            wa_link: "https://wa.me/573012307470",
+          },
+          {
+            name: "Trámite de Cita para Pasaporte",
+            category: "tramites",
+            price: "COP 30,000.00",
+            wa_link: "https://wa.me/573012307470",
+          },
+          {
+            name: "Trámite de RUT en la DIAN",
+            category: "tramites",
+            price: "Consultar",
+            wa_link: "https://wa.me/573012307470",
+          },
+          {
+            name: "Trámite de Apertura de Cuenta Bancaria",
+            category: "tramites",
+            price: "COP 50,000.00",
+            wa_link: "https://wa.me/573012307470",
+          },
+          {
+            name: "Trámite de Cámara de Comercio",
+            category: "tramites",
+            price: "Consultar",
+            wa_link: "https://wa.me/573012307470",
+          },
+          {
+            name: "Trámite de Apostilla y Legalización",
+            category: "tramites",
+            price: "Consultar",
+            wa_link: "https://wa.me/573012307470",
+          },
+          {
+            name: "Certificado de Fumigación",
+            category: "tramites",
+            price: "COP 30,000.00",
+            wa_link: "https://wa.me/573012307470",
+          },
+          {
+            name: "Trámite de Procuraduría, Contraloría y Policía Nacional",
+            category: "tramites",
+            price: "COP 30,000.00",
+            wa_link: "https://wa.me/573012307470",
+          },
+          {
+            name: "Exámenes Médicos Laborales",
+            category: "tramites",
+            price: "Consultar",
+            wa_link: "https://wa.me/573012307470",
+          },
+          {
+            name: "Validación de Bachillerato",
+            category: "tramites",
+            price: "COP 500,000.00",
+            wa_link: "https://wa.me/573012307470",
+          },
+        ];
+
+        function createServiceItemHTML(service) {
+          const buttonText =
+            service.price.toLowerCase() === "consultar"
+              ? "Consultar"
+              : "Comprar";
+          return `
+        <div class="service-item">
+            <div class="service-details">
+                <h5 class="text-lg font-bold text-primary">${service.name}</h5>
+            </div>
+            <div class="service-price">${service.price}</div>
+            <a href="${service.wa_link}" target="_blank" class="btn-main !mt-0 !py-2 !px-6 text-sm">${buttonText}</a>
+        </div>
+    `;
+        }
+
+        function populatePanes() {
+          const panes = {
+            todos: document.querySelector('.catalog-pane[data-pane="todos"]'),
+            cursos: document.querySelector('.catalog-pane[data-pane="cursos"]'),
+            diplomados: document.querySelector(
+              '.catalog-pane[data-pane="diplomados"]'
+            ),
+            tramites: document.querySelector(
+              '.catalog-pane[data-pane="tramites"]'
+            ),
+          };
+
+          for (const key in panes) {
+            if (panes[key]) panes[key].innerHTML = "";
+          }
+
+          services.forEach((service) => {
+            const itemHTML = createServiceItemHTML(service);
+            if (panes.todos) panes.todos.innerHTML += itemHTML;
+            if (panes[service.category])
+              panes[service.category].innerHTML += itemHTML;
+          });
+        }
+
+        const tabs = document.querySelectorAll(".catalog-tab");
+        const panes = document.querySelectorAll(".catalog-pane");
+
+        tabs.forEach((tab) => {
+          tab.addEventListener("click", (e) => {
+            e.preventDefault();
+            tabs.forEach((t) => t.classList.remove("active"));
+            panes.forEach((p) => p.classList.remove("active"));
+
+            tab.classList.add("active");
+            const targetPane = document.querySelector(
+              `.catalog-pane[data-pane="${tab.dataset.tab}"]`
+            );
+            if (targetPane) {
+              targetPane.classList.add("active");
+            }
+          });
+        });
+
+        populatePanes();
+        // ===== FIN: LÓGICA PARA NUEVO CATÁLOGO POR PESTAÑAS =====
+        const header = document.getElementById("main-header");
+        let lastScrollTop = 0; // Variable para guardar la última posición de scroll
+
+        // ✅ LÓGICA MEJORADA PARA EL SCROLL
+        window.addEventListener(
+          "scroll",
+          function () {
+            let scrollTop =
+              window.pageYOffset || document.documentElement.scrollTop;
+
+            // ---- Lógica para ocultar/mostrar header ----
+            if (scrollTop > lastScrollTop && scrollTop > header.offsetHeight) {
+              // Si haces scroll hacia abajo y has pasado el alto del header
+              header.classList.add("header-hidden");
+            } else {
+              // Si haces scroll hacia arriba
+              header.classList.remove("header-hidden");
+            }
+
+            // ---- Lógica para cambiar el fondo del header ----
+            if (scrollTop > 50) {
+              header.classList.add("scrolled");
+            } else {
+              header.classList.remove("scrolled");
+            }
+
+            // Actualizamos la última posición de scroll
+            lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+          },
+          false
+        );
         // Script para el carrusel (Swiper)
         const servicesCarousel = new Swiper(".services-carousel", {
           loop: true,
