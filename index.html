@@ -7,6 +7,10 @@
       Alianza Capacitarte | Catálogo de Cursos, Diplomados y Trámites
     </title>
     <link rel="icon" href="logopagina.png" type="image/png" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/swiper/swiper-bundle.min.css"
+    />
     <script src="https://cdn.tailwindcss.com"></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&#x26;display=swap"
@@ -205,7 +209,7 @@
     </style>
   </head>
   <body class="text-gray-700">
-    <header class="sticky-header py-4 shadow-lg" id="main-header">
+    <header class="sticky-header py-2 shadow-lg" id="main-header">
       <div
         class="container mx-auto flex flex-col md:flex-row justify-between items-center px-6"
       >
@@ -253,7 +257,18 @@
       </div>
     </header>
 
-    <section class="hero-section text-white text-center">
+    <section
+      class="hero-section text-white text-center"
+      style="
+        background-image: linear-gradient(
+            rgba(0, 46, 125, 0.7),
+            rgba(0, 25, 70, 0.8)
+          ),
+          url('portada.jpg');
+        background-size: cover;
+        background-position: center;
+      "
+    >
       <div class="container mx-auto px-6 relative z-10">
         <h1 class="title-highlight mb-6">Alianza Capacitarte</h1>
         <h2 class="text-4xl md:text-6xl font-extrabold leading-tight mb-6">
@@ -263,6 +278,7 @@
           Explora nuestro catálogo de cursos, diplomados y trámites diseñados
           para tu éxito profesional.
         </p>
+
         <div class="space-x-4">
           <a href="#catalogo-servicios" class="btn-main text-lg">
             Ver Catálogo <i class="fas fa-arrow-right ml-2"></i>
@@ -276,6 +292,8 @@
         </div>
       </div>
     </section>
+
+   
 
     <section
       id="beneficios"
@@ -985,60 +1003,161 @@
       </div>
     </section>
 
-    <section id="contacto" class="py-20 bg-white">
+     <section id="servicios-destacados" class="py-20 bg-gray-50">
       <div class="container mx-auto px-6">
         <h3
           class="text-4xl md:text-5xl font-extrabold text-center mb-16 text-primary"
         >
-          Contáctanos para Más Información
+          Nuestros Servicios Destacados
+        </h3>
+
+        <div class="swiper services-carousel relative">
+          <div class="swiper-wrapper">
+            <div
+              class="swiper-slide bg-white rounded-xl overflow-hidden shadow-lg transform hover:scale-105 transition-transform duration-300"
+            >
+              <img
+                src="s1.jpg"
+                alt="Imagen del Curso de Manipulación de Alimentos"
+                class="w-full h-72 object-cover"
+              />
+              <div class="p-6">
+                <h4 class="text-xl font-bold text-primary">
+                  Curso de Manipulación de Alimentos
+                </h4>
+              </div>
+            </div>
+
+            <div
+              class="swiper-slide bg-white rounded-xl overflow-hidden shadow-lg transform hover:scale-105 transition-transform duration-300"
+            >
+              <img
+                src="s2.jpg"
+                alt="Imagen del Diplomado en Primeros Auxilios"
+                class="w-full h-72 object-cover"
+              />
+              <div class="p-6">
+                <h4 class="text-xl font-bold text-primary">
+                  Diplomado en Primeros Auxilios
+                </h4>
+              </div>
+            </div>
+
+            <div
+              class="swiper-slide bg-white rounded-xl overflow-hidden shadow-lg transform hover:scale-105 transition-transform duration-300"
+            >
+              <img
+                src="s3.jpg"
+                alt="Imagen del Curso de Trabajo Seguro en Alturas"
+                class="w-full h-72 object-cover"
+              />
+              <div class="p-6">
+                <h4 class="text-xl font-bold text-primary">
+                  Diplomado en Cuidado al Adulto Mayor
+                </h4>
+              </div>
+            </div>
+
+            <div
+              class="swiper-slide bg-white rounded-xl overflow-hidden shadow-lg transform hover:scale-105 transition-transform duration-300"
+            >
+              <img
+                src="s4.jpg"
+                alt="Imagen del Diplomado en Atención al Cliente"
+                class="w-full h-72 object-cover"
+              />
+              <div class="p-6">
+                <h4 class="text-xl font-bold text-primary">
+                  Diplomado en Atención al Cliente
+                </h4>
+              </div>
+            </div>
+
+            <div
+              class="swiper-slide bg-white rounded-xl overflow-hidden shadow-lg transform hover:scale-105 transition-transform duration-300"
+            >
+              <img
+                src="s5.jpg"
+                alt="Imagen del Diplomado en Atención al Cliente"
+                class="w-full h-72 object-cover"
+              />
+              <div class="p-6">
+                <h4 class="text-xl font-bold text-primary">
+                  Curso Aseo Hospitalario
+                </h4>
+              </div>
+            </div>
+          </div>
+          <div class="swiper-pagination mt-8 relative"></div>
+
+          <div class="swiper-button-next text-primary"></div>
+          <div class="swiper-button-prev text-primary"></div>
+        </div>
+      </div>
+    </section>
+
+
+
+    <section id="ubicacion" class="bg-gray-50 pb-20">
+      <div class="container mx-auto px-6">
+        <h3
+          class="text-4xl md:text-5xl font-extrabold text-center mb-12 text-primary"
+        >
+          Encuéntranos Aquí
         </h3>
         <div
-          class="max-w-2xl mx-auto bg-gray-50 p-10 rounded-3xl shadow-xl border border-gray-200"
+          class="max-w-4xl mx-auto rounded-2xl shadow-xl overflow-hidden border border-gray-200"
         >
-          <form>
-            <div class="mb-6">
-              <label
-                for="nombre"
-                class="block text-gray-800 text-lg font-semibold mb-3"
-                >Nombre</label
-              >
-              <input
-                type="text"
-                id="nombre"
-                name="nombre"
-                class="w-full p-3 rounded-lg border-gray-300 focus:border-secondary"
-              />
-            </div>
-            <div class="mb-6">
-              <label
-                for="email"
-                class="block text-gray-800 text-lg font-semibold mb-3"
-                >Email</label
-              >
-              <input
-                type="email"
-                id="email"
-                name="email"
-                class="w-full p-3 rounded-lg border-gray-300 focus:border-secondary"
-              />
-            </div>
-            <div class="mb-6">
-              <label
-                for="mensaje"
-                class="block text-gray-800 text-lg font-semibold mb-3"
-                >Mensaje</label
-              >
-              <textarea
-                id="mensaje"
-                name="mensaje"
-                rows="6"
-                class="w-full p-3 rounded-lg border-gray-300 focus:border-secondary"
-              ></textarea>
-            </div>
-            <button type="submit" class="btn-main w-full py-4 text-xl">
-              Enviar <i class="fas fa-paper-plane ml-2"></i>
-            </button>
-          </form>
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.1037362698994!2d-75.5717045243863!3d6.250059810162221!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e442956f627478d%3A0x87d20406145c29e1!2sEdificio%20Santa%20Helena!5e0!3m2!1ses-419!2sco!4v1753816507796!5m2!1ses-419!2sco"
+            width="1000"
+            height="450"
+            style="border: 0"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+          ></iframe>
+        </div>
+      </div>
+    </section>
+
+        <section id="contacto" class="py-20 bg-white">
+      <div class="container mx-auto px-6">
+        <h3
+          class="text-4xl md:text-5xl font-extrabold text-center mb-10 text-primary"
+        >
+          Contáctanos para Más Información
+        </h3>
+
+        <div class="text-center mb-12 max-w-3xl mx-auto">
+          <div
+            class="flex flex-col md:flex-row justify-center items-center space-y-6 md:space-y-0 md:space-x-12"
+          >
+            <a
+              href="tel:+573012307470"
+              class="flex items-center text-lg text-gray-700 hover:text-secondary transition duration-300"
+            >
+              <i class="fas fa-phone-alt text-secondary text-2xl mr-3"></i>
+              <span class="font-semibold">Llamar: 301 230 7470</span>
+            </a>
+
+            <a
+              href="https://wa.me/573012307470"
+              target="_blank"
+              class="flex items-center text-lg text-gray-700 hover:text-secondary transition duration-300"
+            >
+              <i class="fab fa-whatsapp text-secondary text-2xl mr-3"></i>
+              <span class="font-semibold">WhatsApp: 301 230 7470</span>
+            </a>
+
+            <a
+              href="mailto:alianzacapacitarte@gmail.com"
+              class="flex items-center text-lg text-gray-700 hover:text-secondary transition duration-300"
+            >
+              <i class="fas fa-envelope text-secondary text-2xl mr-3"></i>
+              <span class="font-semibold">alianzacapacitarte@gmail.com</span>
+            </a>
+          </div>
         </div>
       </div>
     </section>
@@ -1055,84 +1174,124 @@
       </div>
     </footer>
 
-  <a href="https://wa.me/573012307470" target="_blank" class="whatsapp-btn">
-    <img src="icons8-whatsapp-50.png" alt="WhatsApp" class="w-8 h-8">
-</a>
+    <a href="https://wa.me/573012307470" target="_blank" class="whatsapp-btn">
+      <img src="icons8-whatsapp-50.png" alt="WhatsApp" class="w-8 h-8" />
+    </a>
+
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 
     <script>
-      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-        anchor.addEventListener("click", function (e) {
-          e.preventDefault();
-          document
-            .querySelector(this.getAttribute("href"))
-            .scrollIntoView({ behavior: "smooth" });
+      // Envolvemos todo en un listener para asegurar que la página esté completamente cargada
+      document.addEventListener("DOMContentLoaded", function () {
+        // Script para el carrusel (Swiper)
+        const servicesCarousel = new Swiper(".services-carousel", {
+          loop: true,
+          grabCursor: true,
+          spaceBetween: 30,
+          autoplay: {
+            delay: 3000,
+            disableOnInteraction: false,
+          },
+          pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+          },
+          navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+          },
+          breakpoints: {
+            640: { slidesPerView: 1, spaceBetween: 20 },
+            768: { slidesPerView: 2, spaceBetween: 30 },
+            1024: { slidesPerView: 3, spaceBetween: 40 },
+          },
         });
-      });
 
-      window.addEventListener("scroll", function () {
-        const header = document.getElementById("main-header");
-        if (window.scrollY > 50) {
-          header.classList.add("scrolled");
-        } else {
-          header.classList.remove("scrolled");
-        }
-      });
-
-      // Testimonios dinámicos
-      const testimonials = [
-        {
-          text: "El curso de manipulación de alimentos fue clave para mi negocio. ¡Rápido, práctico y con excelente soporte!",
-          author: "Juan Pérez",
-          role: "Emprendedor Gastronómico",
-        },
-        {
-          text: "La validación de mi bachillerato en 3 meses cambió mi vida profesional. ¡Gracias, Alianza Capacitarte!",
-          author: "María López",
-          role: "Profesional en Transición",
-        },
-        {
-          text: "El diplomado en primeros auxilios me dio confianza para actuar. Contenido de alta calidad y muy flexible.",
-          author: "Carlos Ramírez",
-          role: "Trabajador de Salud",
-        },
-      ];
-
-      let currentTestimonial = 0;
-      const testimonialSlider = document.getElementById("testimonial-slider");
-
-      function updateTestimonial() {
-        testimonialSlider.innerHTML = `
-                <div class="testimonial text-center max-w-2xl">
-                    <p class="text-gray-700 italic mb-6">${testimonials[currentTestimonial].text}</p>
-                    <p class="font-bold text-primary">${testimonials[currentTestimonial].author}</p>
-                    <p class="text-sm text-gray-500">${testimonials[currentTestimonial].role}</p>
-                </div>
-            `;
-        currentTestimonial = (currentTestimonial + 1) % testimonials.length;
-      }
-
-      updateTestimonial();
-      setInterval(updateTestimonial, 5000);
-
-      // Filtros de catálogo
-      document.querySelectorAll(".filter-btn").forEach((button) => {
-        button.addEventListener("click", () => {
-          const filter = button.getAttribute("data-filter");
-          document
-            .querySelectorAll(".filter-btn")
-            .forEach((btn) => btn.classList.remove("active"));
-          button.classList.add("active");
-
-          const cards = document.querySelectorAll(".card-service");
-          cards.forEach((card) => {
-            if (
-              filter === "all" ||
-              card.getAttribute("data-category") === filter
-            ) {
-              card.style.display = "block";
-            } else {
-              card.style.display = "none";
+        // Script para el desplazamiento suave de los enlaces del menú
+        document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+          anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            const targetElement = document.querySelector(
+              this.getAttribute("href")
+            );
+            if (targetElement) {
+              targetElement.scrollIntoView({ behavior: "smooth" });
             }
+          });
+        });
+
+        // Script para el encabezado pegajoso
+        window.addEventListener("scroll", function () {
+          const header = document.getElementById("main-header");
+          if (window.scrollY > 50) {
+            header.classList.add("scrolled");
+          } else {
+            header.classList.remove("scrolled");
+          }
+        });
+
+        // Script para los testimonios dinámicos
+        const testimonials = [
+          {
+            text: "El curso de manipulación de alimentos fue clave para mi negocio. ¡Rápido, práctico y con excelente soporte!",
+            author: "Juan Pérez",
+            role: "Emprendedor Gastronómico",
+          },
+          {
+            text: "La validación de mi bachillerato en 3 meses cambió mi vida profesional. ¡Gracias, Alianza Capacitarte!",
+            author: "María López",
+            role: "Profesional en Transición",
+          },
+          {
+            text: "El diplomado en primeros auxilios me dio confianza para actuar. Contenido de alta calidad y muy flexible.",
+            author: "Carlos Ramírez",
+            role: "Trabajador de Salud",
+          },
+        ];
+
+        let currentTestimonial = 0;
+        const testimonialSlider = document.getElementById("testimonial-slider");
+
+        function updateTestimonial() {
+          if (testimonialSlider) {
+            testimonialSlider.innerHTML = `
+              <div class="testimonial text-center max-w-2xl">
+                  <p class="text-gray-700 italic mb-6">${testimonials[currentTestimonial].text}</p>
+                  <p class="font-bold text-primary">${testimonials[currentTestimonial].author}</p>
+                  <p class="text-sm text-gray-500">${testimonials[currentTestimonial].role}</p>
+              </div>
+            `;
+            currentTestimonial = (currentTestimonial + 1) % testimonials.length;
+          }
+        }
+
+        if (testimonialSlider) {
+          updateTestimonial();
+          setInterval(updateTestimonial, 5000);
+        }
+
+        // Script para los filtros del catálogo
+        document.querySelectorAll(".filter-btn").forEach((button) => {
+          button.addEventListener("click", () => {
+            const filter = button.getAttribute("data-filter");
+            document
+              .querySelectorAll(".filter-btn")
+              .forEach((btn) => btn.classList.remove("active"));
+            button.classList.add("active");
+
+            const cards = document.querySelectorAll(
+              "#service-catalog .card-service"
+            );
+            cards.forEach((card) => {
+              if (
+                filter === "all" ||
+                card.getAttribute("data-category") === filter
+              ) {
+                card.style.display = "flex";
+              } else {
+                card.style.display = "none";
+              }
+            });
           });
         });
       });
