@@ -265,6 +265,33 @@
           transform: translateY(0);
         }
       }
+
+      /* ===== INICIO: ESTILOS PARA CARRITO DE COMPRAS ===== */
+      body.cart-open #cart-overlay {
+        display: block;
+      }
+
+      body.cart-open #cart-drawer {
+        transform: translateX(0);
+      }
+
+      .cart-item-remove-btn {
+        background-color: #fee2e2;
+        color: #b91c1c;
+        border-radius: 50%;
+        width: 28px;
+        height: 28px;
+        font-size: 14px;
+        font-weight: bold;
+        line-height: 28px;
+        text-align: center;
+        transition: all 0.2s ease;
+      }
+      .cart-item-remove-btn:hover {
+        background-color: #ef4444;
+        color: white;
+      }
+      /* ===== FIN: ESTILOS PARA CARRITO DE COMPRAS ===== */
     </style>
   </head>
   <body class="text-gray-700">
@@ -629,379 +656,26 @@
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 
     <script>
-      // Envolvemos todo en un listener para asegurar que la página esté completamente cargada
       document.addEventListener("DOMContentLoaded", function () {
-        // ===== INICIO: LÓGICA PARA NUEVO CATÁLOGO POR PESTAÑAS (VERSIÓN COMPLETA) =====
-        const services = [
-          // Cursos
-          {
-            name: "Curso Manipulación de Alimentos",
-            category: "cursos",
-            price: "COP 15,000.00",
-            wa_link: "https://wa.me/573012307470",
-          },
-          {
-            name: "Curso de Aseo y Desinfección Hospitalaria",
-            category: "cursos",
-            price: "COP 30,000.00",
-            wa_link: "https://wa.me/573012307470",
-          },
-          {
-            name: "Curso de Trabajo Seguro en Alturas",
-            category: "cursos",
-            price: "Consultar",
-            wa_link: "https://wa.me/573012307470",
-          },
-          {
-            name: "Curso de Soporte Vial Básico",
-            category: "cursos",
-            price: "COP 70,000.00",
-            wa_link: "https://wa.me/573012307470",
-          },
-          {
-            name: "Curso de Jardinería y Paisajismo",
-            category: "cursos",
-            price: "COP 30,000.00",
-            wa_link: "https://wa.me/573012307470",
-          },
-          {
-            name: "Auxiliar de Bodega",
-            category: "cursos",
-            price: "COP 30,000.00",
-            wa_link: "https://wa.me/573012307470",
-          },
-
-          // Diplomados
-          {
-            name: "Diplomado en Atención al Cliente",
-            category: "diplomados",
-            price: "COP 50,000.00",
-            wa_link: "https://wa.me/573012307470",
-          },
-          {
-            name: "Diplomado Cuidado Integral al Adulto Mayor",
-            category: "diplomados",
-            price: "COP 50,000.00",
-            wa_link: "https://wa.me/573012307470",
-          },
-          {
-            name: "Diplomado en Primeros Auxilios",
-            category: "diplomados",
-            price: "COP 50,000.00",
-            wa_link: "https://wa.me/573012307470",
-          },
-          {
-            name: "Diplomado en Bioseguridad y Residuos Peligrosos",
-            category: "diplomados",
-            price: "COP 50,000.00",
-            wa_link: "https://wa.me/573012307470",
-          },
-          {
-            name: "Diplomado de Camillero",
-            category: "diplomados",
-            price: "COP 50,000.00",
-            wa_link: "https://wa.me/573012307470",
-          },
-          {
-            name: "Diplomado de Seguridad en el Paciente",
-            category: "diplomados",
-            price: "COP 50,000.00",
-            wa_link: "https://wa.me/573012307470",
-          },
-          {
-            name: "Diplomado de Inyectología",
-            category: "diplomados",
-            price: "COP 70,000.00",
-            wa_link: "https://wa.me/573012307470",
-          },
-          {
-            name: "Diplomado en Toma de Muestras de Laboratorio",
-            category: "diplomados",
-            price: "COP 50,000.00",
-            wa_link: "https://wa.me/573012307470",
-          },
-          {
-            name: "Diplomado en Farmacología",
-            category: "diplomados",
-            price: "COP 50,000.00",
-            wa_link: "https://wa.me/573012307470",
-          },
-          {
-            name: "Diplomado en Jefe de Cocina",
-            category: "diplomados",
-            price: "COP 50,000.00",
-            wa_link: "https://wa.me/573012307470",
-          },
-          {
-            name: "Diplomado Auxiliar en Cocina",
-            category: "diplomados",
-            price: "COP 50,000.00",
-            wa_link: "https://wa.me/573012307470",
-          },
-          {
-            name: "Diplomado en Código Fucsia",
-            category: "diplomados",
-            price: "COP 50,000.00",
-            wa_link: "https://wa.me/573012307470",
-          },
-          {
-            name: "Diplomado en Vacunación",
-            category: "diplomados",
-            price: "COP 50,000.00",
-            wa_link: "https://wa.me/573012307470",
-          },
-          {
-            name: "Diplomado en AEIP",
-            category: "diplomados",
-            price: "COP 50,000.00",
-            wa_link: "https://wa.me/573012307470",
-          },
-          {
-            name: "Diplomado en Cuidados Básicos de Enfermería",
-            category: "diplomados",
-            price: "COP 50,000.00",
-            wa_link: "https://wa.me/573012307470",
-          },
-          {
-            name: "Diplomado en Salud Reproductiva",
-            category: "diplomados",
-            price: "COP 50,000.00",
-            wa_link: "https://wa.me/573012307470",
-          },
-          {
-            name: "Diplomado en Atención a Personas con Discapacidad",
-            category: "diplomados",
-            price: "COP 50,000.00",
-            wa_link: "https://wa.me/573012307470",
-          },
-          {
-            name: "Diplomado en Prevención y Protección de la Salud",
-            category: "diplomados",
-            price: "COP 50,000.00",
-            wa_link: "https://wa.me/573012307470",
-          },
-          {
-            name: "Diplomado en Farmacovigilancia",
-            category: "diplomados",
-            price: "COP 50,000.00",
-            wa_link: "https://wa.me/573012307470",
-          },
-          {
-            name: "Auxiliar en Rehabilitación Física",
-            category: "diplomados",
-            price: "COP 150,000.00",
-            wa_link: "https://wa.me/573012307470",
-          },
-          {
-            name: "Programas Técnicos Laborales",
-            category: "diplomados",
-            price: "COP 600,000.00",
-            wa_link: "https://wa.me/573012307470",
-          },
-
-          // Trámites
-          {
-            name: "Hoja de Vida",
-            category: "tramites",
-            price: "COP 30,000.00",
-            wa_link: "https://wa.me/573012307470",
-          },
-          {
-            name: "Trámite de Cita para Pasaporte",
-            category: "tramites",
-            price: "COP 30,000.00",
-            wa_link: "https://wa.me/573012307470",
-          },
-          {
-            name: "Trámite de RUT en la DIAN",
-            category: "tramites",
-            price: "Consultar",
-            wa_link: "https://wa.me/573012307470",
-          },
-          {
-            name: "Trámite de Apertura de Cuenta Bancaria",
-            category: "tramites",
-            price: "COP 50,000.00",
-            wa_link: "https://wa.me/573012307470",
-          },
-          {
-            name: "Trámite de Cámara de Comercio",
-            category: "tramites",
-            price: "Consultar",
-            wa_link: "https://wa.me/573012307470",
-          },
-          {
-            name: "Trámite de Apostilla y Legalización",
-            category: "tramites",
-            price: "Consultar",
-            wa_link: "https://wa.me/573012307470",
-          },
-          {
-            name: "Certificado de Fumigación",
-            category: "tramites",
-            price: "COP 30,000.00",
-            wa_link: "https://wa.me/573012307470",
-          },
-          {
-            name: "Trámite de Procuraduría, Contraloría y Policía Nacional",
-            category: "tramites",
-            price: "COP 30,000.00",
-            wa_link: "https://wa.me/573012307470",
-          },
-          {
-            name: "Exámenes Médicos Laborales",
-            category: "tramites",
-            price: "Consultar",
-            wa_link: "https://wa.me/573012307470",
-          },
-          {
-            name: "Validación de Bachillerato",
-            category: "tramites",
-            price: "COP 500,000.00",
-            wa_link: "https://wa.me/573012307470",
-          },
-        ];
-
-        function createServiceItemHTML(service) {
-          const buttonText =
-            service.price.toLowerCase() === "consultar"
-              ? "Consultar"
-              : "Comprar";
-          return `
-        <div class="service-item">
-            <div class="service-details">
-                <h5 class="text-lg font-bold text-primary">${service.name}</h5>
-            </div>
-            <div class="service-price">${service.price}</div>
-            <a href="${service.wa_link}" target="_blank" class="btn-main !mt-0 !py-2 !px-6 text-sm">${buttonText}</a>
-        </div>
-    `;
-        }
-
-        function populatePanes() {
-          const panes = {
-            todos: document.querySelector('.catalog-pane[data-pane="todos"]'),
-            cursos: document.querySelector('.catalog-pane[data-pane="cursos"]'),
-            diplomados: document.querySelector(
-              '.catalog-pane[data-pane="diplomados"]'
-            ),
-            tramites: document.querySelector(
-              '.catalog-pane[data-pane="tramites"]'
-            ),
-          };
-
-          for (const key in panes) {
-            if (panes[key]) panes[key].innerHTML = "";
-          }
-
-          services.forEach((service) => {
-            const itemHTML = createServiceItemHTML(service);
-            if (panes.todos) panes.todos.innerHTML += itemHTML;
-            if (panes[service.category])
-              panes[service.category].innerHTML += itemHTML;
-          });
-        }
-
-        const tabs = document.querySelectorAll(".catalog-tab");
-        const panes = document.querySelectorAll(".catalog-pane");
-
-        tabs.forEach((tab) => {
-          tab.addEventListener("click", (e) => {
-            e.preventDefault();
-            tabs.forEach((t) => t.classList.remove("active"));
-            panes.forEach((p) => p.classList.remove("active"));
-
-            tab.classList.add("active");
-            const targetPane = document.querySelector(
-              `.catalog-pane[data-pane="${tab.dataset.tab}"]`
-            );
-            if (targetPane) {
-              targetPane.classList.add("active");
-            }
-          });
-        });
-
-        populatePanes();
-        // ===== FIN: LÓGICA PARA NUEVO CATÁLOGO POR PESTAÑAS =====
+        //======================================================================
+        // 1. SELECTORES DE ELEMENTOS DEL DOM
+        //======================================================================
         const header = document.getElementById("main-header");
-        let lastScrollTop = 0; // Variable para guardar la última posición de scroll
+        const testimonialSlider = document.getElementById("testimonial-slider");
+        const cartOverlay = document.getElementById("cart-overlay");
+        const cartDrawer = document.getElementById("cart-drawer");
+        const closeCartBtn = document.getElementById("close-cart-btn");
+        const cartItemsContainer = document.getElementById("cart-items");
+        const cartTotalEl = document.getElementById("cart-total");
+        const checkoutBtn = document.getElementById("checkout-btn");
+        const catalogTabs = document.querySelectorAll(".catalog-tab");
+        const catalogPanes = document.querySelectorAll(".catalog-pane");
 
-        // ✅ LÓGICA MEJORADA PARA EL SCROLL
-        window.addEventListener(
-          "scroll",
-          function () {
-            let scrollTop =
-              window.pageYOffset || document.documentElement.scrollTop;
-
-            // ---- Lógica para ocultar/mostrar header ----
-            if (scrollTop > lastScrollTop && scrollTop > header.offsetHeight) {
-              // Si haces scroll hacia abajo y has pasado el alto del header
-              header.classList.add("header-hidden");
-            } else {
-              // Si haces scroll hacia arriba
-              header.classList.remove("header-hidden");
-            }
-
-            // ---- Lógica para cambiar el fondo del header ----
-            if (scrollTop > 50) {
-              header.classList.add("scrolled");
-            } else {
-              header.classList.remove("scrolled");
-            }
-
-            // Actualizamos la última posición de scroll
-            lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
-          },
-          false
-        );
-        // Script para el carrusel (Swiper)
-        const servicesCarousel = new Swiper(".services-carousel", {
-          loop: true,
-          grabCursor: true,
-          spaceBetween: 30,
-          autoplay: {
-            delay: 3000,
-            disableOnInteraction: false,
-          },
-          pagination: {
-            el: ".swiper-pagination",
-            clickable: true,
-          },
-          navigation: {
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
-          },
-          breakpoints: {
-            640: { slidesPerView: 1, spaceBetween: 20 },
-            768: { slidesPerView: 2, spaceBetween: 30 },
-            1024: { slidesPerView: 3, spaceBetween: 40 },
-          },
-        });
-
-        // Script para el desplazamiento suave de los enlaces del menú
-        document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-          anchor.addEventListener("click", function (e) {
-            e.preventDefault();
-            const targetElement = document.querySelector(
-              this.getAttribute("href")
-            );
-            if (targetElement) {
-              targetElement.scrollIntoView({ behavior: "smooth" });
-            }
-          });
-        });
-
-        // Script para el encabezado pegajoso
-        window.addEventListener("scroll", function () {
-          const header = document.getElementById("main-header");
-          if (window.scrollY > 50) {
-            header.classList.add("scrolled");
-          } else {
-            header.classList.remove("scrolled");
-          }
-        });
-
-        // Script para los testimonios dinámicos
+        //======================================================================
+        // 2. ESTADO DE LA APLICACIÓN (VARIABLES)
+        //======================================================================
+        let cart = [];
+        let lastScrollTop = 0;
         const testimonials = [
           {
             text: "El curso de manipulación de alimentos fue clave para mi negocio. ¡Rápido, práctico y con excelente soporte!",
@@ -1019,53 +693,534 @@
             role: "Trabajador de Salud",
           },
         ];
-
         let currentTestimonial = 0;
-        const testimonialSlider = document.getElementById("testimonial-slider");
+        const services = [
+          {
+            id: 1,
+            name: "Curso Manipulación de Alimentos",
+            category: "cursos",
+            price: "COP 15,000.00",
+            price_numeric: 15000,
+          },
+          {
+            id: 2,
+            name: "Curso de Aseo y Desinfección Hospitalaria",
+            category: "cursos",
+            price: "COP 30,000.00",
+            price_numeric: 30000,
+          },
+          {
+            id: 3,
+            name: "Curso de Trabajo Seguro en Alturas",
+            category: "cursos",
+            price: "Consultar",
+            price_numeric: 0,
+          },
+          {
+            id: 4,
+            name: "Curso de Soporte Vial Básico",
+            category: "cursos",
+            price: "COP 70,000.00",
+            price_numeric: 70000,
+          },
+          {
+            id: 5,
+            name: "Curso de Jardinería y Paisajismo",
+            category: "cursos",
+            price: "COP 30,000.00",
+            price_numeric: 30000,
+          },
+          {
+            id: 6,
+            name: "Auxiliar de Bodega",
+            category: "cursos",
+            price: "COP 30,000.00",
+            price_numeric: 30000,
+          },
+          {
+            id: 101,
+            name: "Diplomado en Atención al Cliente",
+            category: "diplomados",
+            price: "COP 50,000.00",
+            price_numeric: 50000,
+          },
+          {
+            id: 102,
+            name: "Diplomado Cuidado Integral al Adulto Mayor",
+            category: "diplomados",
+            price: "COP 50,000.00",
+            price_numeric: 50000,
+          },
+          {
+            id: 103,
+            name: "Diplomado en Primeros Auxilios",
+            category: "diplomados",
+            price: "COP 50,000.00",
+            price_numeric: 50000,
+          },
+          {
+            id: 104,
+            name: "Diplomado en Bioseguridad y Residuos Peligrosos",
+            category: "diplomados",
+            price: "COP 50,000.00",
+            price_numeric: 50000,
+          },
+          {
+            id: 105,
+            name: "Diplomado de Camillero",
+            category: "diplomados",
+            price: "COP 50,000.00",
+            price_numeric: 50000,
+          },
+          {
+            id: 106,
+            name: "Diplomado de Seguridad en el Paciente",
+            category: "diplomados",
+            price: "COP 50,000.00",
+            price_numeric: 50000,
+          },
+          {
+            id: 107,
+            name: "Diplomado de Inyectología",
+            category: "diplomados",
+            price: "COP 70,000.00",
+            price_numeric: 70000,
+          },
+          {
+            id: 108,
+            name: "Diplomado en Toma de Muestras de Laboratorio",
+            category: "diplomados",
+            price: "COP 50,000.00",
+            price_numeric: 50000,
+          },
+          {
+            id: 109,
+            name: "Diplomado en Farmacología",
+            category: "diplomados",
+            price: "COP 50,000.00",
+            price_numeric: 50000,
+          },
+          {
+            id: 110,
+            name: "Diplomado en Jefe de Cocina",
+            category: "diplomados",
+            price: "COP 50,000.00",
+            price_numeric: 50000,
+          },
+          {
+            id: 111,
+            name: "Diplomado Auxiliar en Cocina",
+            category: "diplomados",
+            price: "COP 50,000.00",
+            price_numeric: 50000,
+          },
+          {
+            id: 112,
+            name: "Diplomado en Código Fucsia",
+            category: "diplomados",
+            price: "COP 50,000.00",
+            price_numeric: 50000,
+          },
+          {
+            id: 113,
+            name: "Diplomado en Vacunación",
+            category: "diplomados",
+            price: "COP 50,000.00",
+            price_numeric: 50000,
+          },
+          {
+            id: 114,
+            name: "Diplomado en AEIP",
+            category: "diplomados",
+            price: "COP 50,000.00",
+            price_numeric: 50000,
+          },
+          {
+            id: 115,
+            name: "Diplomado en Cuidados Básicos de Enfermería",
+            category: "diplomados",
+            price: "COP 50,000.00",
+            price_numeric: 50000,
+          },
+          {
+            id: 116,
+            name: "Diplomado en Salud Reproductiva",
+            category: "diplomados",
+            price: "COP 50,000.00",
+            price_numeric: 50000,
+          },
+          {
+            id: 117,
+            name: "Diplomado en Atención a Personas con Discapacidad",
+            category: "diplomados",
+            price: "COP 50,000.00",
+            price_numeric: 50000,
+          },
+          {
+            id: 118,
+            name: "Diplomado en Prevención y Protección de la Salud",
+            category: "diplomados",
+            price: "COP 50,000.00",
+            price_numeric: 50000,
+          },
+          {
+            id: 119,
+            name: "Diplomado en Farmacovigilancia",
+            category: "diplomados",
+            price: "COP 50,000.00",
+            price_numeric: 50000,
+          },
+          {
+            id: 120,
+            name: "Auxiliar en Rehabilitación Física",
+            category: "diplomados",
+            price: "COP 150,000.00",
+            price_numeric: 150000,
+          },
+          {
+            id: 121,
+            name: "Programas Técnicos Laborales",
+            category: "diplomados",
+            price: "COP 600,000.00",
+            price_numeric: 600000,
+          },
+          {
+            id: 201,
+            name: "Hoja de Vida",
+            category: "tramites",
+            price: "COP 30,000.00",
+            price_numeric: 30000,
+          },
+          {
+            id: 202,
+            name: "Trámite de Cita para Pasaporte",
+            category: "tramites",
+            price: "COP 30,000.00",
+            price_numeric: 30000,
+          },
+          {
+            id: 203,
+            name: "Trámite de RUT en la DIAN",
+            category: "tramites",
+            price: "Consultar",
+            price_numeric: 0,
+          },
+          {
+            id: 204,
+            name: "Trámite de Apertura de Cuenta Bancaria",
+            category: "tramites",
+            price: "COP 50,000.00",
+            price_numeric: 50000,
+          },
+          {
+            id: 205,
+            name: "Trámite de Cámara de Comercio",
+            category: "tramites",
+            price: "Consultar",
+            price_numeric: 0,
+          },
+          {
+            id: 206,
+            name: "Trámite de Apostilla y Legalización",
+            category: "tramites",
+            price: "Consultar",
+            price_numeric: 0,
+          },
+          {
+            id: 207,
+            name: "Certificado de Fumigación",
+            category: "tramites",
+            price: "COP 30,000.00",
+            price_numeric: 30000,
+          },
+          {
+            id: 208,
+            name: "Trámite de Procuraduría, Contraloría y Policía Nacional",
+            category: "tramites",
+            price: "COP 30,000.00",
+            price_numeric: 30000,
+          },
+          {
+            id: 209,
+            name: "Exámenes Médicos Laborales",
+            category: "tramites",
+            price: "Consultar",
+            price_numeric: 0,
+          },
+          {
+            id: 210,
+            name: "Validación de Bachillerato",
+            category: "tramites",
+            price: "COP 500,000.00",
+            price_numeric: 500000,
+          },
+        ];
 
+        //======================================================================
+        // 3. FUNCIONES
+        //======================================================================
+
+        // --- Funciones del Carrito ---
+        function openCart() {
+          document.body.classList.add("cart-open");
+        }
+        function closeCart() {
+          document.body.classList.remove("cart-open");
+        }
+
+        function renderCart() {
+          cartItemsContainer.innerHTML = "";
+          let total = 0;
+          if (cart.length === 0) {
+            cartItemsContainer.innerHTML =
+              '<p class="text-gray-500 text-center">Tu carrito está vacío.</p>';
+          } else {
+            cart.forEach((item) => {
+              total += item.price_numeric;
+              const itemEl = document.createElement("div");
+              itemEl.className =
+                "flex justify-between items-center mb-4 pb-2 border-b";
+              itemEl.innerHTML = `
+                    <div class="pr-4">
+                        <p class="font-bold text-primary">${item.name}</p>
+                        <p class="text-sm text-secondary">${item.price}</p>
+                    </div>
+                    <button class="cart-item-remove-btn" data-id="${item.id}" title="Quitar item">&times;</button>
+                `;
+              cartItemsContainer.appendChild(itemEl);
+            });
+          }
+          cartTotalEl.textContent = `COP ${total.toLocaleString("es-CO")}.00`;
+
+          // --- CAMBIO IMPORTANTE: CÓDIGO ELIMINADO DE AQUÍ ---
+          // El listener de los botones de eliminar ya no se pone aquí.
+        }
+
+        window.addToCart = function (productId) {
+          const productToAdd = services.find((p) => p.id === productId);
+          if (productToAdd) {
+            cart.push(productToAdd);
+            renderCart();
+            openCart();
+          }
+        };
+
+        function removeFromCart(productId) {
+          const indexToRemove = cart.findIndex((item) => item.id === productId);
+          if (indexToRemove > -1) {
+            cart.splice(indexToRemove, 1);
+          }
+          renderCart();
+        }
+
+        // --- Funciones del Catálogo ---
+        function createServiceItemHTML(service) {
+          const buttonText =
+            service.price.toLowerCase() === "consultar"
+              ? "Consultar"
+              : "Añadir al Carrito";
+          let buttonAction;
+          if (service.price.toLowerCase() === "consultar") {
+            const message = `Hola, quisiera consultar el precio de: ${service.name}`;
+            buttonAction = `window.open('https://wa.me/573012307470?text=${encodeURIComponent(
+              message
+            )}', '_blank')`;
+          } else {
+            buttonAction = `window.addToCart(${service.id})`;
+          }
+          return `
+            <div class="service-item">
+                <div class="service-details"><h5 class="text-lg font-bold text-primary">${service.name}</h5></div>
+                <div class="service-price">${service.price}</div>
+                <button onclick="${buttonAction}" class="btn-main !mt-0 !py-2 !px-4 text-sm whitespace-nowrap">${buttonText}</button>
+            </div>
+        `;
+        }
+
+        function populatePanes() {
+          const panes = {
+            todos: document.querySelector('.catalog-pane[data-pane="todos"]'),
+            cursos: document.querySelector('.catalog-pane[data-pane="cursos"]'),
+            diplomados: document.querySelector(
+              '.catalog-pane[data-pane="diplomados"]'
+            ),
+            tramites: document.querySelector(
+              '.catalog-pane[data-pane="tramites"]'
+            ),
+          };
+          for (const key in panes) {
+            if (panes[key]) panes[key].innerHTML = "";
+          }
+          services.forEach((service) => {
+            const itemHTML = createServiceItemHTML(service);
+            if (panes.todos) panes.todos.innerHTML += itemHTML;
+            if (panes[service.category])
+              panes[service.category].innerHTML += itemHTML;
+          });
+        }
+
+        // --- Otras Funciones ---
         function updateTestimonial() {
           if (testimonialSlider) {
-            testimonialSlider.innerHTML = `
-              <div class="testimonial text-center max-w-2xl">
-                  <p class="text-gray-700 italic mb-6">${testimonials[currentTestimonial].text}</p>
-                  <p class="font-bold text-primary">${testimonials[currentTestimonial].author}</p>
-                  <p class="text-sm text-gray-500">${testimonials[currentTestimonial].role}</p>
-              </div>
-            `;
+            testimonialSlider.innerHTML = `<div class="testimonial text-center max-w-2xl"><p class="text-gray-700 italic mb-6">${testimonials[currentTestimonial].text}</p><p class="font-bold text-primary">${testimonials[currentTestimonial].author}</p><p class="text-sm text-gray-500">${testimonials[currentTestimonial].role}</p></div>`;
             currentTestimonial = (currentTestimonial + 1) % testimonials.length;
           }
         }
 
+        //======================================================================
+        // 4. EVENT LISTENERS E INICIALIZACIONES
+        //======================================================================
+
+        // Listener del Scroll (Unificado)
+        window.addEventListener(
+          "scroll",
+          function () {
+            let scrollTop =
+              window.pageYOffset || document.documentElement.scrollTop;
+            if (scrollTop > lastScrollTop && scrollTop > header.offsetHeight) {
+              header.classList.add("header-hidden");
+            } else {
+              header.classList.remove("header-hidden");
+            }
+            if (scrollTop > 50) {
+              header.classList.add("scrolled");
+            } else {
+              header.classList.remove("scrolled");
+            }
+            lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+          },
+          false
+        );
+
+        // Listeners del Carrito
+        closeCartBtn.addEventListener("click", closeCart);
+        cartOverlay.addEventListener("click", closeCart);
+        checkoutBtn.addEventListener("click", () => {
+          if (cart.length === 0) {
+            alert("Tu carrito está vacío. Añade servicios para continuar.");
+            return;
+          }
+          let message =
+            "¡Hola! Quisiera solicitar los siguientes servicios:\n\n";
+          let total = 0;
+          cart.forEach((item, index) => {
+            message += `${index + 1}. ${item.name} - ${item.price}\n`;
+            total += item.price_numeric;
+          });
+          message += `\n*Total a Pagar: COP ${total.toLocaleString(
+            "es-CO"
+          )}.00*`;
+          const whatsappUrl = `https://wa.me/573012307470?text=${encodeURIComponent(
+            message
+          )}`;
+          window.open(whatsappUrl, "_blank");
+        });
+
+        // ✅ --- CAMBIO IMPORTANTE: DELEGACIÓN DE EVENTOS PARA ELIMINAR ---
+        // Este único listener maneja todos los clics para eliminar, ahora y en el futuro.
+        cartItemsContainer.addEventListener("click", function (e) {
+          if (e.target && e.target.matches(".cart-item-remove-btn")) {
+            const itemIdToRemove = parseInt(e.target.dataset.id, 10);
+            removeFromCart(itemIdToRemove);
+          }
+        });
+
+        // Listeners del Catálogo
+        catalogTabs.forEach((tab) => {
+          tab.addEventListener("click", (e) => {
+            e.preventDefault();
+            catalogTabs.forEach((t) => t.classList.remove("active"));
+            catalogPanes.forEach((p) => p.classList.remove("active"));
+            tab.classList.add("active");
+            const targetPane = document.querySelector(
+              `.catalog-pane[data-pane="${tab.dataset.tab}"]`
+            );
+            if (targetPane) {
+              targetPane.classList.add("active");
+            }
+          });
+        });
+
+        // Listener para los links del menú (desplazamiento suave)
+        document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+          anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            const targetElement = document.querySelector(
+              this.getAttribute("href")
+            );
+            if (targetElement) {
+              targetElement.scrollIntoView({ behavior: "smooth" });
+            }
+          });
+        });
+
+        // Inicialización del Carrusel de Servicios Destacados
+        if (document.querySelector(".services-carousel")) {
+          new Swiper(".services-carousel", {
+            loop: true,
+            grabCursor: true,
+            spaceBetween: 30,
+            autoplay: { delay: 3000, disableOnInteraction: false },
+            pagination: { el: ".swiper-pagination", clickable: true },
+            navigation: {
+              nextEl: ".swiper-button-next",
+              prevEl: ".swiper-button-prev",
+            },
+            breakpoints: {
+              640: { slidesPerView: 1, spaceBetween: 20 },
+              768: { slidesPerView: 2, spaceBetween: 30 },
+              1024: { slidesPerView: 3, spaceBetween: 40 },
+            },
+          });
+        }
+
+        // Inicialización de funciones al cargar la página
+        populatePanes();
         if (testimonialSlider) {
           updateTestimonial();
           setInterval(updateTestimonial, 5000);
         }
-
-        // Script para los filtros del catálogo
-        document.querySelectorAll(".filter-btn").forEach((button) => {
-          button.addEventListener("click", () => {
-            const filter = button.getAttribute("data-filter");
-            document
-              .querySelectorAll(".filter-btn")
-              .forEach((btn) => btn.classList.remove("active"));
-            button.classList.add("active");
-
-            const cards = document.querySelectorAll(
-              "#service-catalog .card-service"
-            );
-            cards.forEach((card) => {
-              if (
-                filter === "all" ||
-                card.getAttribute("data-category") === filter
-              ) {
-                card.style.display = "flex";
-              } else {
-                card.style.display = "none";
-              }
-            });
-          });
-        });
+        renderCart();
       });
     </script>
+
+    <div
+      id="cart-overlay"
+      class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"
+    ></div>
+
+    <div
+      id="cart-drawer"
+      class="fixed top-0 right-0 h-full w-full max-w-md bg-white shadow-2xl z-50 transform translate-x-full transition-transform duration-300 ease-in-out"
+    >
+      <div class="flex flex-col h-full">
+        <div class="flex justify-between items-center p-4 border-b">
+          <h3 class="text-2xl font-bold text-primary">Tu Carrito de Compras</h3>
+          <button
+            id="close-cart-btn"
+            class="text-gray-500 hover:text-gray-800 text-3xl"
+          >
+            &times;
+          </button>
+        </div>
+
+        <div id="cart-items" class="flex-grow p-4 overflow-y-auto"></div>
+
+        <div class="p-4 border-t">
+          <div class="flex justify-between items-center mb-4">
+            <p class="text-lg font-bold">Total:</p>
+            <p id="cart-total" class="text-lg font-bold text-primary">
+              COP 0.00
+            </p>
+          </div>
+          <button
+            id="checkout-btn"
+            class="btn-main w-full text-center !py-3 !text-lg"
+          >
+            Finalizar Compra por WhatsApp <i class="fab fa-whatsapp ml-2"></i>
+          </button>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
