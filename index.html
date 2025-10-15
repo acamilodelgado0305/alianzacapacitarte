@@ -1015,26 +1015,35 @@
 
         // --- Funciones del Catálogo ---
         function createServiceItemHTML(service) {
-          const buttonText =
-            service.price.toLowerCase() === "consultar"
-              ? "Consultar"
-              : "Añadir al Carrito";
-          let buttonAction;
-          if (service.price.toLowerCase() === "consultar") {
-            const message = `Hola, quisiera consultar el precio de: ${service.name}`;
-            buttonAction = `window.open('https://wa.me/573012307470?text=${encodeURIComponent(
-              message
-            )}', '_blank')`;
-          } else {
-            buttonAction = `window.addToCart(${service.id})`;
-          }
-          return `
-            <div class="service-item">
-                <div class="service-details"><h5 class="text-lg font-bold text-primary">${service.name}</h5></div>
-                <div class="service-price">${service.price}</div>
-                <button onclick="${buttonAction}" class="btn-main !mt-0 !py-2 !px-4 text-sm whitespace-nowrap">${buttonText}</button>
-            </div>
-        `;
+            // Caso especial para el Curso de Manipulación de Alimentos
+            if (service.id === 1) {
+                return `
+                    <div class="service-item">
+                        <div class="service-details"><h5 class="text-lg font-bold text-primary">${service.name}</h5></div>
+                        <div class="service-price">${service.price}</div>
+                        <a href="servicios/curso-manipulacion-de-alimentos.html" class="btn-main !mt-0 !py-2 !px-4 text-sm whitespace-nowrap">Ver Detalles del Curso</a>
+                    </div>
+                `;
+            }
+
+            // Lógica original para todos los demás servicios
+            const buttonText = service.price.toLowerCase() === "consultar" ? "Consultar" : "Añadir al Carrito";
+            let buttonAction;
+            if (service.price.toLowerCase() === "consultar") {
+                const message = `Hola, quisiera consultar el precio de: ${service.name}`;
+                buttonAction = `window.open('https://wa.me/573012307470?text=${encodeURIComponent(
+                    message
+                )}', '_blank')`;
+            } else {
+                buttonAction = `window.addToCart(${service.id})`;
+            }
+            return `
+                <div class="service-item">
+                    <div class="service-details"><h5 class="text-lg font-bold text-primary">${service.name}</h5></div>
+                    <div class="service-price">${service.price}</div>
+                    <button onclick="${buttonAction}" class="btn-main !mt-0 !py-2 !px-4 text-sm whitespace-nowrap">${buttonText}</button>
+                </div>
+            `;
         }
 
         function populatePanes() {
