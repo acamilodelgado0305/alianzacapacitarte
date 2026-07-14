@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth bg-slate-50">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tienda Virtual | Alianza Capacitarte</title>
+  <link rel="icon" href="logopagina.png" type="image/png" />
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'], heading: ['Outfit', 'sans-serif'] },
+          colors: {
+            primary: { DEFAULT: '#002e7d', light: '#1a4b9e', dark: '#001b4a' },
+            secondary: { DEFAULT: '#0c8dac', light: '#2aa5c4', dark: '#066d86' },
+            accent: '#ff6b6b'
+          },
+          boxShadow: { 'glass': '0 25px 50px -12px rgba(0, 0, 0, 0.08)' }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    .glass-nav {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 10px 30px -10px rgba(0,0,0,0.05);
+    }
+    .btn-gradient {
+      background: linear-gradient(135deg, theme('colors.primary.DEFAULT') 0%, theme('colors.secondary.DEFAULT') 100%);
+      transition: 0.3s;
+    }
+    .btn-gradient:hover { transform: translateY(-2px); box-shadow: 0 10px 20px -5px rgba(12, 141, 172, 0.4); }
+    
+    .catalog-tab { transition: all 0.3s ease; border-bottom: 2px solid transparent; }
+    .catalog-tab.active { color: theme('colors.primary.DEFAULT'); font-weight: 700; border-bottom-color: theme('colors.secondary.DEFAULT'); }
+    .catalog-pane { display: none; animation: fadeIn 0.4s ease forwards; }
+    .catalog-pane.active { display: grid; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    body.cart-open #cart-overlay { display: block; }
+    body.cart-open #cart-drawer { transform: translateX(0); }
+  </style>
+</head>
+<body class="antialiased text-slate-700 pt-20 flex flex-col min-h-screen">
+
+  <!-- ================= HEADER ================= -->
+  <header class="fixed top-0 w-full z-50 glass-nav py-3" id="main-header">
+    <div class="container mx-auto px-6 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <img src="alianzacapa.png" alt="Logo" class="h-10 object-contain" />
+        <span class="font-heading font-bold text-primary hidden sm:inline-block border-l pl-3 ml-1">Tienda Oficial</span>
+      </a>
+      
+      <nav class="flex items-center gap-6">
+        <a href="index.html" class="text-sm font-semibold text-slate-500 hover:text-primary transition-colors hidden sm:block">Volver al Inicio</a>
+        
+        <div class="flex items-center gap-4">
+          <button onclick="openCart()" class="relative p-2 text-slate-600 hover:text-primary transition-colors bg-slate-100 rounded-full w-10 h-10 flex items-center justify-center">
+            <i class="fas fa-shopping-cart"></i>
+            <span id="cart-badge" class="absolute top-0 right-0 -mt-1 -mr-1 bg-accent text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow-sm border border-white">0</span>
+          </button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ================= HERO TIENDA ================= -->
+  <section class="bg-primary text-white py-16 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10 bg-[url('img/krakenimages-376KN_ISplE-unsplash.jpg')] bg-cover bg-center mix-blend-overlay"></div>
+    <div class="absolute right-0 top-0 w-96 h-96 bg-secondary/30 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+    
+    <div class="container mx-auto px-6 relative z-10 text-center max-w-3xl">
+      <h1 class="font-heading text-4xl md:text-5xl font-extrabold mb-4">Catálogo de Programas</h1>
+      <p class="text-lg text-slate-300 font-light">Explora nuestros cursos, diplomados y trámites. Invierte en tu futuro profesional hoy mismo con certificación de validez nacional.</p>
+    </div>
+  </section>
+
+  <!-- ================= CONTENIDO DE LA TIENDA ================= -->
+  <main class="flex-grow container mx-auto px-6 py-12">
+    
+    <!-- Filtros -->
+    <div class="flex flex-wrap justify-center gap-2 md:gap-6 bg-white p-2 rounded-2xl shadow-sm border border-slate-200 mb-12 max-w-3xl mx-auto">
+      <button class="catalog-tab active px-6 py-2.5 rounded-xl text-sm font-medium text-slate-500 hover:bg-slate-50" data-tab="todos">Todos</button>
+      <button class="catalog-tab px-6 py-2.5 rounded-xl text-sm font-medium text-slate-500 hover:bg-slate-50" data-tab="cursos">Cursos</button>
+      <button class="catalog-tab px-6 py-2.5 rounded-xl text-sm font-medium text-slate-500 hover:bg-slate-50" data-tab="diplomados">Diplomados</button>
+      <button class="catalog-tab px-6 py-2.5 rounded-xl text-sm font-medium text-slate-500 hover:bg-slate-50" data-tab="tramites">Trámites</button>
+    </div>
+
+    <!-- Grid de Productos -->
+    <div id="catalog-content">
+      <div class="catalog-pane active grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" data-pane="todos"></div>
+      <div class="catalog-pane grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" data-pane="cursos"></div>
+      <div class="catalog-pane grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" data-pane="diplomados"></div>
+      <div class="catalog-pane grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" data-pane="tramites"></div>
+    </div>
+
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="bg-white border-t border-slate-200 py-8 text-center text-slate-500 text-sm mt-auto">
+    <p>© 2025 Alianza Capacitarte. Todos los derechos reservados.</p>
+  </footer>
+
+  <!-- ================= CARRITO DRAWER ================= -->
+  <div id="cart-overlay" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[60] hidden transition-opacity" onclick="closeCart()"></div>
+
+  <div id="cart-drawer" class="fixed top-0 right-0 h-full w-full max-w-md bg-white shadow-2xl z-[70] transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col">
+    <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary"><i class="fas fa-shopping-cart"></i></div>
+        <h3 class="font-heading text-xl font-bold text-slate-800">Tu Carrito</h3>
+      </div>
+      <button onclick="closeCart()" class="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-500 hover:text-slate-800 transition-colors"><i class="fas fa-times"></i></button>
+    </div>
+
+    <div id="cart-items" class="flex-grow p-6 overflow-y-auto space-y-4"></div>
+
+    <div class="p-6 border-t border-slate-100 bg-slate-50">
+      <div class="flex justify-between items-center mb-6">
+        <p class="text-slate-600 font-medium">Total Estimado:</p>
+        <p id="cart-total" class="font-heading text-2xl font-bold text-primary">COP 0.00</p>
+      </div>
+      <button id="checkout-btn" class="w-full btn-gradient py-4 rounded-xl text-white font-bold text-lg flex items-center justify-center gap-3 shadow-lg shadow-primary/30">
+        <i class="fab fa-whatsapp text-xl"></i> Solicitar por WhatsApp
+      </button>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      
+      const services = [
+          { id: 1, name: "Curso Manipulación de Alimentos", category: "cursos", price: "COP 20,000.00", price_numeric: 20000 },
+          { id: 2, name: "Curso de Aseo y Desinfección Hospitalaria", category: "cursos", price: "COP 50,000.00", price_numeric: 50000 },
+          { id: 3, name: "Curso de Trabajo Seguro en Alturas", category: "cursos", price: "Consultar", price_numeric: 0 },
+          { id: 4, name: "Curso de Soporte Vial Básico", category: "cursos", price: "COP 70,000.00", price_numeric: 70000 },
+          { id: 5, name: "Curso de Jardinería y Paisajismo", category: "cursos", price: "COP 30,000.00", price_numeric: 30000 },
+          { id: 6, name: "Auxiliar de Bodega", category: "cursos", price: "COP 30,000.00", price_numeric: 30000 },
+          { id: 101, name: "Diplomado en Atención al Cliente", category: "diplomados", price: "COP 50,000.00", price_numeric: 50000 },
+          { id: 102, name: "Diplomado Cuidado Integral al Adulto Mayor", category: "diplomados", price: "COP 50,000.00", price_numeric: 50000 },
+          { id: 103, name: "Diplomado en Primeros Auxilios", category: "diplomados", price: "COP 50,000.00", price_numeric: 50000 },
+          { id: 104, name: "Diplomado en Bioseguridad y Residuos Peligrosos", category: "diplomados", price: "COP 50,000.00", price_numeric: 50000 },
+          { id: 105, name: "Diplomado de Camillero", category: "diplomados", price: "COP 50,000.00", price_numeric: 50000 },
+          { id: 106, name: "Diplomado de Seguridad en el Paciente", category: "diplomados", price: "COP 50,000.00", price_numeric: 50000 },
+          { id: 107, name: "Diplomado de Inyectología", category: "diplomados", price: "COP 70,000.00", price_numeric: 70000 },
+          { id: 108, name: "Diplomado en Toma de Muestras de Laboratorio", category: "diplomados", price: "COP 50,000.00", price_numeric: 50000 },
+          { id: 109, name: "Diplomado en Farmacología", category: "diplomados", price: "COP 50,000.00", price_numeric: 50000 },
+          { id: 110, name: "Diplomado en Jefe de Cocina", category: "diplomados", price: "COP 50,000.00", price_numeric: 50000 },
+          { id: 111, name: "Diplomado Auxiliar en Cocina", category: "diplomados", price: "COP 50,000.00", price_numeric: 50000 },
+          { id: 112, name: "Diplomado en Código Fucsia", category: "diplomados", price: "COP 50,000.00", price_numeric: 50000 },
+          { id: 113, name: "Diplomado en Vacunación", category: "diplomados", price: "COP 50,000.00", price_numeric: 50000 },
+          { id: 114, name: "Diplomado en AEIP", category: "diplomados", price: "COP 50,000.00", price_numeric: 50000 },
+          { id: 115, name: "Diplomado en Cuidados Básicos de Enfermería", category: "diplomados", price: "COP 50,000.00", price_numeric: 50000 },
+          { id: 116, name: "Diplomado en Salud Reproductiva", category: "diplomados", price: "COP 50,000.00", price_numeric: 50000 },
+          { id: 117, name: "Diplomado en Atención a Personas con Discapacidad", category: "diplomados", price: "COP 50,000.00", price_numeric: 50000 },
+          { id: 118, name: "Diplomado en Prevención y Protección de la Salud", category: "diplomados", price: "COP 50,000.00", price_numeric: 50000 },
+          { id: 119, name: "Diplomado en Farmacovigilancia", category: "diplomados", price: "COP 50,000.00", price_numeric: 50000 },
+          { id: 120, name: "Auxiliar en Rehabilitación Física", category: "diplomados", price: "COP 150,000.00", price_numeric: 150000 },
+          { id: 121, name: "Programas Técnicos Laborales", category: "diplomados", price: "COP 600,000.00", price_numeric: 600000 },
+          { id: 201, name: "Hoja de Vida", category: "tramites", price: "COP 30,000.00", price_numeric: 30000 },
+          { id: 202, name: "Trámite de Cita para Pasaporte", category: "tramites", price: "COP 30,000.00", price_numeric: 30000 },
+          { id: 203, name: "Trámite de RUT en la DIAN", category: "tramites", price: "Consultar", price_numeric: 0 },
+          { id: 204, name: "Trámite de Apertura de Cuenta Bancaria", category: "tramites", price: "COP 50,000.00", price_numeric: 50000 },
+          { id: 205, name: "Trámite de Cámara de Comercio", category: "tramites", price: "Consultar", price_numeric: 0 },
+          { id: 206, name: "Trámite de Apostilla y Legalización", category: "tramites", price: "Consultar", price_numeric: 0 },
+          { id: 207, name: "Certificado de Fumigación", category: "tramites", price: "COP 30,000.00", price_numeric: 30000 },
+          { id: 208, name: "Trámite de Procuraduría, Contraloría y Policía Nacional", category: "tramites", price: "COP 30,000.00", price_numeric: 30000 },
+          { id: 209, name: "Exámenes Médicos Laborales", category: "tramites", price: "Consultar", price_numeric: 0 },
+          { id: 210, name: "Validación de Bachillerato", category: "tramites", price: "COP 500,000.00", price_numeric: 500000 },
+      ];
+
+      // Mapeo Inteligente de Imágenes por Rubro
+      function getServiceImage(name) {
+        const lowerName = name.toLowerCase();
+        
+        const keywordsFood = ['alimento', 'cocina', 'chef', 'gastronomia'];
+        const keywordsHealth = ['hospitalaria', 'vial', 'enfermeria', 'salud', 'rehabilitacion', 'farmacologia', 'inyectologia', 'muestras', 'vacunacion', 'bioseguridad', 'fucsia', 'aeip', 'discapacidad', 'camillero', 'paciente', 'auxilios'];
+        const keywordsLegal = ['hoja', 'pasaporte', 'rut', 'bancaria', 'comercio', 'apostilla', 'procuraduria', 'contraloria', 'policia'];
+        const keywordsIndustry = ['altura', 'bodega', 'paisajismo', 'fumigacion', 'laborales'];
+
+        if (keywordsFood.some(kw => lowerName.includes(kw))) return 'img/cat_food_1784041792174.png';
+        if (keywordsHealth.some(kw => lowerName.includes(kw))) return 'img/cat_health_1784041777987.png';
+        if (keywordsLegal.some(kw => lowerName.includes(kw))) return 'img/cat_legal_1784041827564.png';
+        if (keywordsIndustry.some(kw => lowerName.includes(kw))) return 'img/cat_industry_1784041860281.png';
+        
+        return 'img/cat_general_1784041897021.png';
+      }
+
+      // === FUNCIONES DEL CARRITO ===
+      let cart = [];
+      const cartItemsContainer = document.getElementById("cart-items");
+      const cartTotalEl = document.getElementById("cart-total");
+      const badgeDesk = document.getElementById("cart-badge");
+
+      window.openCart = function() { document.body.classList.add("cart-open"); };
+      window.closeCart = function() { document.body.classList.remove("cart-open"); };
+
+      function renderCart() {
+        cartItemsContainer.innerHTML = "";
+        let total = 0;
+        badgeDesk.textContent = cart.length;
+
+        if (cart.length === 0) {
+          cartItemsContainer.innerHTML = `
+            <div class="flex flex-col items-center justify-center h-full text-slate-400">
+              <i class="fas fa-shopping-basket text-5xl mb-4 opacity-50"></i>
+              <p>Tu carrito está vacío</p>
+            </div>`;
+        } else {
+          cart.forEach((item) => {
+            total += item.price_numeric;
+            const itemEl = document.createElement("div");
+            itemEl.className = "bg-white p-4 rounded-xl border border-slate-100 shadow-sm flex justify-between items-center";
+            itemEl.innerHTML = `
+              <div class="pr-3">
+                  <p class="font-bold text-slate-800 text-sm mb-1 leading-tight">${item.name}</p>
+                  <p class="text-sm font-semibold text-secondary">${item.price}</p>
+              </div>
+              <button class="cart-item-remove-btn w-8 h-8 rounded-full bg-red-50 text-red-500 hover:bg-red-500 hover:text-white transition-colors flex items-center justify-center" data-id="${item.id}">
+                <i class="fas fa-trash-alt text-xs pointer-events-none"></i>
+              </button>
+            `;
+            cartItemsContainer.appendChild(itemEl);
+          });
+        }
+        cartTotalEl.textContent = `COP ${total.toLocaleString("es-CO")}.00`;
+      }
+
+      window.addToCart = function (productId) {
+        const productToAdd = services.find((p) => p.id === productId);
+        if (productToAdd) {
+          cart.push(productToAdd);
+          renderCart();
+          openCart();
+        }
+      };
+
+      cartItemsContainer.addEventListener("click", function (e) {
+        const btn = e.target.closest('.cart-item-remove-btn');
+        if (btn) {
+          cart.splice(cart.findIndex((item) => item.id === parseInt(btn.dataset.id, 10)), 1);
+          renderCart();
+        }
+      });
+
+      document.getElementById("checkout-btn").addEventListener("click", () => {
+        if (cart.length === 0) return alert("Tu carrito está vacío.");
+        let message = "¡Hola! Quisiera solicitar los siguientes servicios:\n\n";
+        let total = 0;
+        cart.forEach((item, i) => { message += `${i + 1}. ${item.name} - ${item.price}\n`; total += item.price_numeric; });
+        message += `\n*Total a Pagar: COP ${total.toLocaleString("es-CO")}.00*`;
+        window.open(`https://wa.me/573012307470?text=${encodeURIComponent(message)}`, "_blank");
+      });
+
+      // === RENDERIZADO DEL CATÁLOGO (NUEVAS TARJETAS CON IMAGEN) ===
+      function createServiceItemHTML(service) {
+          const isConsultar = service.price.toLowerCase() === "consultar";
+          const buttonText = isConsultar ? "Consultar" : "Añadir al Carrito";
+          const buttonIcon = isConsultar ? "fa-whatsapp" : "fa-cart-plus";
+          const buttonAction = isConsultar 
+            ? `window.open('https://wa.me/573012307470?text=${encodeURIComponent('Hola, quisiera consultar el precio de: ' + service.name)}', '_blank')`
+            : `window.addToCart(${service.id})`;
+
+          const imageSrc = getServiceImage(service.name);
+
+          return `
+              <div class="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col group border border-slate-100">
+                  <div class="h-48 overflow-hidden relative">
+                    <img src="${imageSrc}" alt="${service.name}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent"></div>
+                    <span class="absolute top-4 left-4 bg-white/90 backdrop-blur text-primary text-xs font-bold px-3 py-1.5 rounded-full shadow-sm capitalize">${service.category}</span>
+                  </div>
+                  
+                  <div class="p-6 flex-grow flex flex-col justify-between bg-white">
+                    <div class="mb-6">
+                      <h5 class="font-heading text-lg font-bold text-slate-800 leading-tight group-hover:text-secondary transition-colors">${service.name}</h5>
+                    </div>
+                    <div class="pt-4 border-t border-slate-100 flex flex-col gap-3">
+                      <div class="font-bold text-slate-700 text-lg flex items-center justify-between">
+                        <span class="text-xs text-slate-400 font-normal uppercase tracking-wider">Inversión</span>
+                        <span class="${isConsultar ? 'text-primary' : 'text-secondary'}">${service.price}</span>
+                      </div>
+                      <button onclick="${buttonAction}" class="w-full py-3 rounded-xl ${isConsultar ? 'bg-slate-100 text-primary hover:bg-slate-200' : 'btn-gradient text-white shadow-md shadow-primary/20'} font-bold transition-all flex items-center justify-center gap-2">
+                        <i class="fas ${buttonIcon}"></i> ${buttonText}
+                      </button>
+                    </div>
+                  </div>
+              </div>
+          `;
+      }
+
+      function populatePanes() {
+        const panes = {
+          todos: document.querySelector('.catalog-pane[data-pane="todos"]'),
+          cursos: document.querySelector('.catalog-pane[data-pane="cursos"]'),
+          diplomados: document.querySelector('.catalog-pane[data-pane="diplomados"]'),
+          tramites: document.querySelector('.catalog-pane[data-pane="tramites"]'),
+        };
+        services.forEach((service) => {
+          const itemHTML = createServiceItemHTML(service);
+          if (panes.todos) panes.todos.innerHTML += itemHTML;
+          if (panes[service.category]) panes[service.category].innerHTML += itemHTML;
+        });
+      }
+
+      populatePanes();
+
+      // Listeners Tabs
+      document.querySelectorAll(".catalog-tab").forEach((tab) => {
+        tab.addEventListener("click", (e) => {
+          document.querySelectorAll(".catalog-tab").forEach(t => t.classList.remove("active"));
+          document.querySelectorAll(".catalog-pane").forEach(p => p.classList.remove("active"));
+          tab.classList.add("active");
+          document.querySelector(`.catalog-pane[data-pane="${tab.dataset.tab}"]`).classList.add("active");
+        });
+      });
+    });
+  </script>
+</body>
+</html>
