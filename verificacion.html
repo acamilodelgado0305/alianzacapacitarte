@@ -522,7 +522,7 @@
     // ─── DESCARGA DE ARCHIVOS ────────────────────────────────
     window.handleDownload = async (docType, courseName) => {
       const intensity = extractIntensity(courseName);
-      const { nombre, apellido, numeroDeDocumento, tipoDeDocumento, tipoDocumento, tipo_documento } = currentStudentData;
+      const { nombre, apellido, numeroDeDocumento, tipoDeDocumento, tipoDocumento, tipo_documento, createdAt, fechaVencimiento } = currentStudentData;
       const tDoc = tipoDeDocumento || tipoDocumento || tipo_documento || 'C.C';
 
       // Alerta de carga
@@ -551,6 +551,10 @@
             tipoDocumento: tDoc,
             curso: courseName,
             intensidadHoraria: intensity,
+            // Fecha real de expedición (la misma que muestra la tarjeta), no la de hoy.
+            fechaExpedicion: createdAt,
+            fechaVencimiento: fechaVencimiento,
+            fechaFinalizacion: createdAt, // usado por la variante /generar-certificado-pdf (excel)
           });
         } else {
           endpoint = `${API_DOCS_URL}/api/generar-carnet`;
@@ -559,6 +563,9 @@
           fd.append('numeroDocumento', numeroDeDocumento);
           fd.append('tipoDocumento', tDoc);
           fd.append('intensidadHoraria', intensity);
+          // Fechas reales: frontal = expedición, posterior = vencimiento.
+          if (createdAt) fd.append('fechaExpedicion', createdAt);
+          if (fechaVencimiento) fd.append('fechaVencimiento', fechaVencimiento);
           opts.body = fd;
         }
 
