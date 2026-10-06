@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alianza Capacitarte | Asesoría Gratis por WhatsApp</title>
+  <meta name="description" content="Cursos y diplomados certificados 100% online. Déjanos tus datos y un asesor te atiende por WhatsApp." />
+  <!-- Landing exclusiva para campañas de TikTok: no indexar para no competir con el sitio principal -->
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="theme-color" content="#00172B" />
+  <link rel="icon" href="logopagina.png" type="image/png" />
+
+  <!-- TikTok Pixel Code Start -->
+  <script>
+  !function (w, d, t) {
+    w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(
+  var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script")
+  ;n.type="text/javascript",n.async=!0,n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
+
+    ttq.load('DB2MFT3C77U534NEGB60');
+    ttq.page();
+  }(window, document, 'ttq');
+  </script>
+  <!-- TikTok Pixel Code End -->
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet" />
+
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            heading: ['Outfit', 'sans-serif'],
+          },
+          colors: {
+            primary: {
+              DEFAULT: '#002e7d',
+              light: '#1a4b9e',
+              dark: '#001b4a'
+            },
+            secondary: {
+              DEFAULT: '#0c8dac',
+              light: '#2aa5c4',
+              dark: '#066d86'
+            },
+            accent: '#ff6b6b',
+            navy: '#00172B',
+            whatsapp: '#25D366'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #00172B;
+      color: #e2e8f0;
+    }
+
+    .field {
+      width: 100%;
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 0.875rem;
+      padding: 0.875rem 1rem;
+      font-size: 1rem; /* 16px evita el zoom automático en iOS */
+      color: #0f172a;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .field:focus {
+      outline: none;
+      border-color: #0c8dac;
+      box-shadow: 0 0 0 4px rgba(12, 141, 172, 0.15);
+    }
+    .field.invalid {
+      border-color: #ef4444;
+    }
+
+    .program-chip.selected {
+      border-color: #22d3ee;
+      background: rgba(34, 211, 238, 0.12);
+    }
+    .program-chip.selected .chip-check {
+      opacity: 1;
+    }
+
+    @keyframes wa-pulse {
+      0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.55); }
+      70% { box-shadow: 0 0 0 16px rgba(37, 211, 102, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+    }
+    .wa-pulse { animation: wa-pulse 2s infinite; }
+  </style>
+</head>
+<body class="antialiased overflow-x-hidden font-sans">
+
+  <!-- ================= HEADER ================= -->
+  <header class="w-full bg-white/95 backdrop-blur border-b border-slate-200">
+    <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+      <img src="alianzacapa.png" alt="Alianza Capacitarte" class="h-10 object-contain" />
+      <span class="inline-flex items-center gap-1.5 text-xs font-bold text-green-700 bg-green-50 border border-green-200 px-3 py-1.5 rounded-full">
+        <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> Asesores en línea
+      </span>
+    </div>
+  </header>
+
+  <!-- ================= HERO + FORMULARIO ================= -->
+  <section class="relative overflow-hidden">
+    <div class="absolute -top-24 -right-24 w-80 h-80 bg-cyan-400/20 rounded-full blur-[100px] pointer-events-none"></div>
+    <div class="absolute bottom-0 -left-24 w-80 h-80 bg-blue-500/20 rounded-full blur-[100px] pointer-events-none"></div>
+
+    <div class="relative max-w-5xl mx-auto px-4 pt-8 pb-12 md:py-16 grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+
+      <!-- Texto -->
+      <div class="text-center md:text-left">
+        <span class="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-cyan-300 bg-cyan-400/10 border border-cyan-400/30 px-3 py-1.5 rounded-full mb-4">
+          <i class="fas fa-laptop"></i> 100% Online · Certificado verificable
+        </span>
+        <h1 class="font-heading text-4xl md:text-5xl font-black text-white leading-[1.05] mb-4">
+          Certifícate <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-emerald-300">desde tu celular</span> y consigue trabajo más rápido
+        </h1>
+        <p class="text-slate-300 text-base md:text-lg mb-6">
+          Cursos y diplomados desde <strong class="text-green-400">$20.000 COP</strong>. Déjanos tus datos y un asesor te escribe por WhatsApp con toda la información.
+        </p>
+
+        <ul class="hidden md:grid gap-3 text-slate-200 text-sm">
+          <li class="flex items-center gap-3"><i class="fas fa-check-circle text-cyan-400"></i> Estudia a tu ritmo, sin horarios</li>
+          <li class="flex items-center gap-3"><i class="fas fa-check-circle text-cyan-400"></i> Certificado con código de verificación en línea</li>
+          <li class="flex items-center gap-3"><i class="fas fa-check-circle text-cyan-400"></i> Acompañamiento de un asesor por WhatsApp</li>
+        </ul>
+      </div>
+
+      <!-- Formulario -->
+      <div id="formulario" class="bg-white rounded-3xl shadow-[0_25px_60px_rgba(0,0,0,0.45)] p-6 md:p-8 text-slate-700">
+        <div class="text-center mb-5">
+          <h2 class="font-heading text-2xl font-extrabold text-primary">Recibe información gratis</h2>
+          <p class="text-sm text-slate-500 mt-1">Te respondemos en minutos por WhatsApp</p>
+        </div>
+
+        <form id="lead-form" novalidate class="space-y-4">
+          <div class="field-wrap">
+            <label for="nombre" class="block text-sm font-bold text-slate-700 mb-1.5">Nombre completo</label>
+            <input id="nombre" name="nombre" type="text" autocomplete="name" placeholder="Ej: Laura Gómez" class="field" required />
+            <p class="error-msg hidden text-xs text-red-500 mt-1">Escribe tu nombre</p>
+          </div>
+
+          <div class="field-wrap">
+            <label for="celular" class="block text-sm font-bold text-slate-700 mb-1.5">Número de WhatsApp</label>
+            <div class="flex gap-2">
+              <span class="flex items-center gap-1.5 px-3 rounded-[0.875rem] bg-slate-100 border-2 border-slate-200 text-slate-600 font-semibold text-sm shrink-0">🇨🇴 +57</span>
+              <input id="celular" name="celular" type="tel" inputmode="numeric" autocomplete="tel-national" maxlength="10" placeholder="300 123 4567" class="field" required />
+            </div>
+            <p class="error-msg hidden text-xs text-red-500 mt-1">Ingresa un celular válido de 10 dígitos (empieza por 3)</p>
+          </div>
+
+          <div class="field-wrap">
+            <label for="programa" class="block text-sm font-bold text-slate-700 mb-1.5">¿Qué te interesa estudiar?</label>
+            <select id="programa" name="programa" class="field" required>
+              <option value="" disabled selected>Selecciona una opción</option>
+              <optgroup label="Cursos">
+                <option>Curso Manipulación de Alimentos</option>
+                <option>Curso de Aseo y Desinfección Hospitalaria</option>
+                <option>Curso de Trabajo Seguro en Alturas</option>
+                <option>Curso de Soporte Vial Básico</option>
+                <option>Auxiliar de Bodega</option>
+              </optgroup>
+              <optgroup label="Diplomados">
+                <option>Diplomado en Primeros Auxilios</option>
+                <option>Diplomado Cuidado Integral al Adulto Mayor</option>
+                <option>Diplomado en Atención al Cliente</option>
+                <option>Diplomado de Inyectología</option>
+                <option>Diplomado en Cuidados Básicos de Enfermería</option>
+                <option>Diplomado en Toma de Muestras de Laboratorio</option>
+                <option>Diplomado en Farmacología</option>
+                <option>Diplomado en Bioseguridad y Residuos Peligrosos</option>
+                <option>Diplomado en Jefe de Cocina</option>
+              </optgroup>
+              <optgroup label="Otros">
+                <option>Programas Técnicos Laborales</option>
+                <option>Aún no sé, quiero asesoría</option>
+              </optgroup>
+            </select>
+            <p class="error-msg hidden text-xs text-red-500 mt-1">Selecciona un programa</p>
+          </div>
+
+          <label class="flex items-start gap-2.5 text-xs text-slate-500 cursor-pointer">
+            <input id="acepto" type="checkbox" checked class="mt-0.5 w-4 h-4 accent-[#0c8dac] shrink-0" />
+            <span>Autorizo a Alianza Capacitarte a contactarme por WhatsApp y al tratamiento de mis datos personales (Ley 1581 de 2012).</span>
+          </label>
+          <p id="acepto-error" class="hidden text-xs text-red-500 -mt-2">Debes aceptar para poder contactarte</p>
+
+          <button id="submit-btn" type="submit" class="wa-pulse w-full bg-whatsapp hover:bg-[#1ebe5a] text-white font-black text-lg py-4 rounded-2xl flex items-center justify-center gap-3 transition-colors">
+            <i class="fab fa-whatsapp text-2xl"></i>
+            <span id="submit-label">Hablar con un asesor</span>
+          </button>
+
+          <p class="text-[11px] text-center text-slate-400"><i class="fas fa-lock mr-1"></i> Tus datos están seguros. No enviamos spam.</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PROGRAMAS POPULARES ================= -->
+  <section class="bg-[#002440] py-12 md:py-16">
+    <div class="max-w-5xl mx-auto px-4">
+      <h2 class="font-heading text-2xl md:text-3xl font-extrabold text-white text-center mb-2">Los más pedidos</h2>
+      <p class="text-slate-400 text-center text-sm mb-8">Toca uno y te llevamos directo al formulario</p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        <button type="button" data-program="Curso Manipulación de Alimentos" class="program-chip relative text-left bg-[#00172B] border-2 border-[#003859] hover:border-cyan-400/60 rounded-2xl p-4 flex items-center gap-4 transition-colors">
+          <span class="w-12 h-12 rounded-xl bg-red-500/15 text-red-400 flex items-center justify-center text-xl shrink-0"><i class="fas fa-utensils"></i></span>
+          <span class="flex-1">
+            <span class="block font-bold text-white leading-tight">Manipulación de Alimentos</span>
+            <span class="block text-sm text-slate-400"><s class="text-slate-500">$60.000</s> <strong class="text-green-400">$20.000</strong></span>
+          </span>
+          <i class="chip-check fas fa-check-circle text-cyan-400 opacity-0 transition-opacity"></i>
+        </button>
+
+        <button type="button" data-program="Diplomado en Primeros Auxilios" class="program-chip relative text-left bg-[#00172B] border-2 border-[#003859] hover:border-cyan-400/60 rounded-2xl p-4 flex items-center gap-4 transition-colors">
+          <span class="w-12 h-12 rounded-xl bg-orange-500/15 text-orange-400 flex items-center justify-center text-xl shrink-0"><i class="fas fa-kit-medical"></i></span>
+          <span class="flex-1">
+            <span class="block font-bold text-white leading-tight">Primeros Auxilios</span>
+            <span class="block text-sm"><strong class="text-green-400">$50.000</strong></span>
+          </span>
+          <i class="chip-check fas fa-check-circle text-cyan-400 opacity-0 transition-opacity"></i>
+        </button>
+
+        <button type="button" data-program="Diplomado Cuidado Integral al Adulto Mayor" class="program-chip relative text-left bg-[#00172B] border-2 border-[#003859] hover:border-cyan-400/60 rounded-2xl p-4 flex items-center gap-4 transition-colors">
+          <span class="w-12 h-12 rounded-xl bg-purple-500/15 text-purple-400 flex items-center justify-center text-xl shrink-0"><i class="fas fa-hand-holding-heart"></i></span>
+          <span class="flex-1">
+            <span class="block font-bold text-white leading-tight">Cuidado al Adulto Mayor</span>
+            <span class="block text-sm"><strong class="text-green-400">$50.000</strong></span>
+          </span>
+          <i class="chip-check fas fa-check-circle text-cyan-400 opacity-0 transition-opacity"></i>
+        </button>
+
+        <button type="button" data-program="Diplomado de Inyectología" class="program-chip relative text-left bg-[#00172B] border-2 border-[#003859] hover:border-cyan-400/60 rounded-2xl p-4 flex items-center gap-4 transition-colors">
+          <span class="w-12 h-12 rounded-xl bg-cyan-500/15 text-cyan-400 flex items-center justify-center text-xl shrink-0"><i class="fas fa-syringe"></i></span>
+          <span class="flex-1">
+            <span class="block font-bold text-white leading-tight">Inyectología</span>
+            <span class="block text-sm"><strong class="text-green-400">$70.000</strong></span>
+          </span>
+          <i class="chip-check fas fa-check-circle text-cyan-400 opacity-0 transition-opacity"></i>
+        </button>
+
+        <button type="button" data-program="Diplomado en Atención al Cliente" class="program-chip relative text-left bg-[#00172B] border-2 border-[#003859] hover:border-cyan-400/60 rounded-2xl p-4 flex items-center gap-4 transition-colors">
+          <span class="w-12 h-12 rounded-xl bg-pink-500/15 text-pink-400 flex items-center justify-center text-xl shrink-0"><i class="fas fa-headset"></i></span>
+          <span class="flex-1">
+            <span class="block font-bold text-white leading-tight">Atención al Cliente</span>
+            <span class="block text-sm"><strong class="text-green-400">$50.000</strong></span>
+          </span>
+          <i class="chip-check fas fa-check-circle text-cyan-400 opacity-0 transition-opacity"></i>
+        </button>
+
+        <button type="button" data-program="Programas Técnicos Laborales" class="program-chip relative text-left bg-[#00172B] border-2 border-[#003859] hover:border-cyan-400/60 rounded-2xl p-4 flex items-center gap-4 transition-colors">
+          <span class="w-12 h-12 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center text-xl shrink-0"><i class="fas fa-graduation-cap"></i></span>
+          <span class="flex-1">
+            <span class="block font-bold text-white leading-tight">Técnicos Laborales</span>
+            <span class="block text-sm text-slate-400">Pregunta por financiación</span>
+          </span>
+          <i class="chip-check fas fa-check-circle text-cyan-400 opacity-0 transition-opacity"></i>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CONFIANZA ================= -->
+  <section class="py-12 md:py-16">
+    <div class="max-w-5xl mx-auto px-4">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+        <div class="bg-white/5 border border-white/10 rounded-2xl p-5">
+          <i class="fas fa-mobile-screen-button text-2xl text-cyan-400 mb-2"></i>
+          <p class="font-bold text-white text-sm">100% online</p>
+          <p class="text-xs text-slate-400 mt-1">Desde tu celular</p>
+        </div>
+        <div class="bg-white/5 border border-white/10 rounded-2xl p-5">
+          <i class="fas fa-certificate text-2xl text-cyan-400 mb-2"></i>
+          <p class="font-bold text-white text-sm">Certificado</p>
+          <p class="text-xs text-slate-400 mt-1">Verificable en línea</p>
+        </div>
+        <div class="bg-white/5 border border-white/10 rounded-2xl p-5">
+          <i class="fas fa-bolt text-2xl text-cyan-400 mb-2"></i>
+          <p class="font-bold text-white text-sm">Rápido</p>
+          <p class="text-xs text-slate-400 mt-1">Avanza a tu ritmo</p>
+        </div>
+        <div class="bg-white/5 border border-white/10 rounded-2xl p-5">
+          <i class="fab fa-whatsapp text-2xl text-cyan-400 mb-2"></i>
+          <p class="font-bold text-white text-sm">Asesor real</p>
+          <p class="text-xs text-slate-400 mt-1">Te acompaña por chat</p>
+        </div>
+      </div>
+
+      <div class="mt-10 text-center">
+        <a href="#formulario" class="inline-flex items-center gap-3 bg-whatsapp hover:bg-[#1ebe5a] text-white font-black text-lg px-8 py-4 rounded-2xl transition-colors">
+          <i class="fab fa-whatsapp text-2xl"></i> Quiero inscribirme
+        </a>
+        <p class="text-xs text-slate-500 mt-4">
+          ¿Ya tienes un certificado? <a href="verificacion.html" class="text-cyan-400 underline">Verifícalo aquí</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="border-t border-white/10 py-6 text-center text-xs text-slate-500 px-4">
+    © <span id="year"></span> Alianza Capacitarte · <a href="index.html" class="hover:text-slate-300">alianzacapacitarte</a>
+  </footer>
+
+  <!-- Botón flotante WhatsApp (contacto directo, sin formulario) -->
+  <a id="wa-float" href="https://wa.me/573012307470" class="fixed bottom-5 right-5 z-40 bg-whatsapp text-white w-14 h-14 rounded-full flex items-center justify-center text-3xl shadow-[0_10px_20px_rgba(37,211,102,0.4)] hover:scale-110 transition-transform" aria-label="Escribir por WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+
+  <script>
+    (function () {
+      const WHATSAPP_NUMBER = "573012307470";
+      const SOURCE_TAG = "TikTok";
+
+      const form = document.getElementById("lead-form");
+      const nombre = document.getElementById("nombre");
+      const celular = document.getElementById("celular");
+      const programa = document.getElementById("programa");
+      const acepto = document.getElementById("acepto");
+      const submitBtn = document.getElementById("submit-btn");
+      const submitLabel = document.getElementById("submit-label");
+
+      document.getElementById("year").textContent = new Date().getFullYear();
+
+      // --- Utilidades del píxel ---
+      function eventId(prefix) {
+        return prefix + "_" + Date.now() + "_" + Math.random().toString(36).slice(2, 10);
+      }
+
+      async function sha256(value) {
+        if (!window.crypto || !crypto.subtle) return null; // solo disponible en https
+        const data = new TextEncoder().encode(value.trim().toLowerCase());
+        const hash = await crypto.subtle.digest("SHA-256", data);
+        return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, "0")).join("");
+      }
+
+      function waUrl(text) {
+        return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
+      }
+
+      // --- Validación ---
+      function setError(input, hasError) {
+        input.classList.toggle("invalid", hasError);
+        const msg = input.closest(".field-wrap").querySelector(".error-msg");
+        if (msg) msg.classList.toggle("hidden", !hasError);
+      }
+
+      celular.addEventListener("input", () => {
+        celular.value = celular.value.replace(/\D/g, "").slice(0, 10);
+        if (celular.classList.contains("invalid")) setError(celular, !/^3\d{9}$/.test(celular.value));
+      });
+      nombre.addEventListener("input", () => {
+        if (nombre.classList.contains("invalid")) setError(nombre, nombre.value.trim().length < 3);
+      });
+      programa.addEventListener("change", () => {
+        setError(programa, false);
+        syncChips();
+      });
+      acepto.addEventListener("change", () => {
+        document.getElementById("acepto-error").classList.toggle("hidden", acepto.checked);
+      });
+
+      // --- Programas populares: preseleccionan el formulario ---
+      const chips = document.querySelectorAll(".program-chip");
+      function syncChips() {
+        chips.forEach(c => c.classList.toggle("selected", c.dataset.program === programa.value));
+      }
+      chips.forEach(chip => {
+        chip.addEventListener("click", () => {
+          programa.value = chip.dataset.program;
+          setError(programa, false);
+          syncChips();
+          ttq.track("ViewContent", {
+            contents: [{ content_id: chip.dataset.program, content_name: chip.dataset.program, content_type: "product" }]
+          });
+          document.getElementById("formulario").scrollIntoView({ behavior: "smooth", block: "start" });
+          setTimeout(() => nombre.focus({ preventScroll: true }), 500);
+        });
+      });
+
+      // --- Envío del lead ---
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const nameVal = nombre.value.trim();
+        const phoneVal = celular.value.trim();
+        const programVal = programa.value;
+
+        const nameBad = nameVal.length < 3;
+        const phoneBad = !/^3\d{9}$/.test(phoneVal);
+        const programBad = !programVal;
+        setError(nombre, nameBad);
+        setError(celular, phoneBad);
+        setError(programa, programBad);
+        document.getElementById("acepto-error").classList.toggle("hidden", acepto.checked);
+
+        if (nameBad || phoneBad || programBad || !acepto.checked) {
+          const first = [nombre, celular, programa].find(el => el.classList.contains("invalid"));
+          if (first) first.focus();
+          return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.classList.remove("wa-pulse");
+        submitLabel.textContent = "Abriendo WhatsApp...";
+
+        // Coincidencia avanzada: TikTok recibe el teléfono en hash SHA-256 (E.164)
+        try {
+          const hashedPhone = await sha256("+57" + phoneVal);
+          if (hashedPhone) ttq.identify({ phone_number: hashedPhone });
+        } catch (err) { /* no bloquea el envío */ }
+
+        const contents = [{ content_id: programVal, content_name: programVal, content_type: "product" }];
+        ttq.track("SubmitForm", { contents }, { event_id: eventId("submit") });
+        ttq.track("Contact", { contents }, { event_id: eventId("contact") });
+
+        const message =
+          `¡Hola Alianza Capacitarte! 👋\n` +
+          `Soy *${nameVal}* y quiero información sobre:\n` +
+          `📚 *${programVal}*\n\n` +
+          `Mi número: +57 ${phoneVal}\n` +
+          `(Vengo desde ${SOURCE_TAG})`;
+
+        // Pequeña espera para que el píxel alcance a enviar los eventos antes de salir de la página.
+        // Se usa location.href (no window.open) para que funcione dentro del navegador interno de TikTok.
+        setTimeout(() => {
+          window.location.href = waUrl(message);
+          setTimeout(() => {
+            submitBtn.disabled = false;
+            submitBtn.classList.add("wa-pulse");
+            submitLabel.textContent = "Hablar con un asesor";
+          }, 2500);
+        }, 600);
+      });
+
+      // --- Botón flotante: contacto directo ---
+      const waFloat = document.getElementById("wa-float");
+      waFloat.href = waUrl(`¡Hola Alianza Capacitarte! 👋 Quiero información sobre sus cursos. (Vengo desde ${SOURCE_TAG})`);
+      waFloat.addEventListener("click", (e) => {
+        e.preventDefault();
+        ttq.track("ClickButton", { contents: [{ content_name: "WhatsApp flotante" }] }, { event_id: eventId("click") });
+        ttq.track("Contact", {}, { event_id: eventId("contact") });
+        setTimeout(() => { window.location.href = waFloat.href; }, 400);
+      });
+    })();
+  </script>
+</body>
+</html>
