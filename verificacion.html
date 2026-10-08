@@ -241,8 +241,21 @@
           
           <!-- Tabla de Datos -->
           <div class="border-l-[6px] border-[#3c7657] bg-[#f0f4f2] w-full flex flex-col shadow-sm">
-            <!-- Row 1: Tipo de Documento -->
+            <!-- Row 0: Modo de consulta -->
             <div class="flex flex-col sm:flex-row border-b border-white">
+              <div class="sm:w-2/5 p-4 text-[#3c7657] text-sm font-medium">
+                Consultar por
+              </div>
+              <div class="sm:w-3/5 p-3 bg-[#f8faf9]">
+                <select id="modo-consulta" class="w-full sm:w-64 border border-gray-400 rounded-sm p-1 text-sm bg-gray-50 focus:outline-none focus:border-blue-500 text-gray-800">
+                  <option value="documento">Número de documento</option>
+                  <option value="codigo">Código de verificación</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Row 1: Tipo de Documento -->
+            <div id="row-tipo-doc" class="flex flex-col sm:flex-row border-b border-white">
               <div class="sm:w-2/5 p-4 text-[#3c7657] text-sm font-medium">
                 Tipo de Documento
               </div>
@@ -256,9 +269,9 @@
               </div>
             </div>
             
-            <!-- Row 2: Número de documento -->
+            <!-- Row 2: Número de documento / Código de verificación -->
             <div class="flex flex-col sm:flex-row">
-              <div class="sm:w-2/5 p-4 text-[#3c7657] text-sm font-medium">
+              <div id="label-consulta" class="sm:w-2/5 p-4 text-[#3c7657] text-sm font-medium">
                 Número de documento (sin puntos, ni comas)
               </div>
               <div class="sm:w-3/5 p-3 bg-[#f8faf9] flex items-center">
@@ -271,6 +284,10 @@
               </div>
             </div>
           </div>
+
+          <p id="ayuda-codigo" class="hidden text-xs text-gray-500 -mt-2 pl-1">
+            El código de verificación aparece impreso debajo del código QR de su certificado, carnet o diploma (ej. <strong>7K3M-9Q2X</strong>). También puede escanear el QR con la cámara del celular.
+          </p>
 
           <!-- Botón Buscar -->
           <div class="mt-8 pl-1">
@@ -333,7 +350,7 @@
           </div>
           <div class="flex flex-col sm:flex-row border-b border-white">
             <div class="sm:w-1/4 p-3 text-[#3c7657] text-sm font-medium">Estado</div>
-            <div class="sm:w-3/4 p-3 bg-[#f8faf9] text-green-700 font-bold">Activo - Verificado</div>
+            <div class="sm:w-3/4 p-3 bg-[#f8faf9] text-green-700 font-bold" id="student-estado">Activo - Verificado</div>
           </div>
           <div class="flex flex-col sm:flex-row">
             <div class="sm:w-1/4 p-3 text-[#3c7657] text-sm font-medium">Fecha de la consulta</div>
@@ -341,14 +358,19 @@
           </div>
         </div>
 
-        <div class="mb-4 text-sm text-gray-700 font-bold border-b border-gray-200 pb-2">
-          Certificaciones Registradas: <span id="cert-count" class="text-[#004e82]">0</span>
+        <div id="courses-block">
+          <div class="mb-4 text-sm text-gray-700 font-bold border-b border-gray-200 pb-2">
+            Certificaciones Registradas: <span id="cert-count" class="text-[#004e82]">0</span>
+          </div>
+
+          <!-- Lista de Cursos -->
+          <div id="courses-container" class="space-y-6">
+            <!-- Los cursos se inyectarán aquí -->
+          </div>
         </div>
 
-        <!-- Lista de Cursos -->
-        <div id="courses-container" class="space-y-6">
-          <!-- Los cursos se inyectarán aquí -->
-        </div>
+        <!-- Documentos emitidos con código de verificación (diplomas, certificados, carnets) -->
+        <div id="docs-emitidos-container"></div>
       </div>
 
     </div>
@@ -400,6 +422,40 @@
       return await response.json();
     }
 
+    // Registro de documentos emitidos (certificado/carnet de alimentos, diploma y
+    // certificado de acreditación). Vive en andesback: cada PDF lleva impreso
+    // debajo del QR su código de verificación, y el QR abre esta página con
+    // ?codigo=XXXX-XXXX.
+    //   GET /api/verificar-documento/:codigo      → un documento ó 404
+    //   GET /api/verificar-documento?documento=N  → [documentos] de esa persona
+    async function getDocumentoPorCodigo(codigo) {
+      const response = await fetch(`${API_DOCS_URL}/api/verificar-documento/${encodeURIComponent(codigo)}`);
+      if (!response.ok) {
+        if (response.status === 404 || response.status === 400) throw new Error('NOT_FOUND');
+        throw new Error('SERVER_ERROR');
+      }
+      return await response.json();
+    }
+
+    // Complementa la consulta por cédula. Si falla, no tumba la consulta
+    // principal: simplemente no se muestran los documentos con código.
+    async function getDocumentosPorNumero(numero) {
+      try {
+        const response = await fetch(`${API_DOCS_URL}/api/verificar-documento?documento=${encodeURIComponent(numero)}`);
+        if (!response.ok) return [];
+        const data = await response.json();
+        return Array.isArray(data) ? data : [];
+      } catch {
+        return [];
+      }
+    }
+
+    // Acepta el código como lo teclee la persona (minúsculas, sin guion).
+    const normalizarCodigo = (valor) => {
+      const limpio = String(valor || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+      return limpio.length === 8 ? `${limpio.slice(0, 4)}-${limpio.slice(4)}` : null;
+    };
+
     // ─── LÓGICA DE LA UI ──────────────────────────────────────
     const form = document.getElementById('verify-form');
     const input = document.getElementById('cedula-input');
@@ -411,9 +467,30 @@
     const searchSection = document.getElementById('search-section');
     const resultsSection = document.getElementById('results-section');
     
-    // Filtro para solo números
+    const modoSelect = document.getElementById('modo-consulta');
+    const rowTipoDoc = document.getElementById('row-tipo-doc');
+    const labelConsulta = document.getElementById('label-consulta');
+    const ayudaCodigo = document.getElementById('ayuda-codigo');
+    const esModoCodigo = () => modoSelect.value === 'codigo';
+
+    const aplicarModo = () => {
+      const codigo = esModoCodigo();
+      rowTipoDoc.style.display = codigo ? 'none' : '';
+      ayudaCodigo.classList.toggle('hidden', !codigo);
+      labelConsulta.textContent = codigo
+        ? 'Código de verificación (debajo del QR)'
+        : 'Número de documento (sin puntos, ni comas)';
+      input.placeholder = codigo ? 'Ej. 7K3M-9Q2X' : '';
+      input.maxLength = codigo ? 9 : 20;
+      input.value = '';
+    };
+    modoSelect.addEventListener('change', () => { aplicarModo(); input.focus(); });
+
+    // Cédula: solo números. Código: letras, números y guion, en mayúscula.
     input.addEventListener('input', function(e) {
-      this.value = this.value.replace(/[^0-9]/g, '');
+      this.value = esModoCodigo()
+        ? this.value.toUpperCase().replace(/[^A-Z0-9-]/g, '')
+        : this.value.replace(/[^0-9]/g, '');
     });
 
     const setBtnLoading = (isLoading) => {
@@ -435,14 +512,14 @@
       return numbers && numbers.length ? numbers[numbers.length - 1] : '10';
     };
 
-    // Helper formato fecha (date-fns global)
+    // Helper formato fecha → "1 de marzo de 2025". Va con Intl y no con date-fns:
+    // el build de date-fns que se carga arriba no expone `window.dateFns`, así que
+    // las fechas salían en crudo (ISO).
     const fmt = (dateStr) => {
       if (!dateStr) return '—';
-      try {
-        return window.dateFns.format(new Date(dateStr), "d 'de' MMMM 'de' yyyy", { locale: window.dateFns.locale.es });
-      } catch {
-        return dateStr;
-      }
+      const d = dateStr instanceof Date ? dateStr : new Date(dateStr);
+      if (isNaN(d.getTime())) return String(dateStr);
+      return d.toLocaleDateString('es-CO', { day: 'numeric', month: 'long', year: 'numeric' });
     };
 
     // ─── PLANES DE CAPACITACIÓN ──────────────────────────────
@@ -591,12 +668,181 @@
       `;
     };
 
+    // ─── DOCUMENTOS CON CÓDIGO DE VERIFICACIÓN ───────────────
+    // Las fechas del registro llegan como 'YYYY-MM-DD'. new Date('YYYY-MM-DD') las
+    // toma como medianoche UTC y en Colombia pintaría el día anterior, así que se
+    // arman como fecha local.
+    const fechaLocal = (iso) => {
+      const m = String(iso || '').match(/^(\d{4})-(\d{2})-(\d{2})/);
+      return m ? new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3])) : null;
+    };
+    const fmtDia = (iso) => {
+      const d = fechaLocal(iso);
+      return d ? fmt(d) : '—';
+    };
+    const estaVencido = (doc) => {
+      const venc = fechaLocal(doc.fechaVencimiento);
+      if (!venc) return false;
+      const hoy = new Date(); hoy.setHours(0, 0, 0, 0);
+      return venc < hoy;
+    };
+
+    const badgeEstado = (doc) => estaVencido(doc)
+      ? '<span class="text-[10px] font-bold bg-red-600 text-white px-2 py-0.5 rounded-sm shadow-inner">VENCIDO</span>'
+      : '<span class="text-[10px] font-bold bg-green-600 text-white px-2 py-0.5 rounded-sm shadow-inner">VÁLIDO</span>';
+
+    // Tarjeta completa de un documento (consulta por código).
+    const renderDocumentoCard = (doc) => {
+      const filas = [
+        ['Código de verificación', `<span class="font-mono font-bold tracking-wider text-[#004e82]">${esc(doc.codigo)}</span>`],
+        ['Tipo de documento', esc(doc.tipo)],
+        ['Intensidad Horaria', doc.intensidadHoraria ? `${esc(doc.intensidadHoraria)} horas` : '—'],
+      ];
+      if (doc.fechaInicio && doc.fechaFin) {
+        filas.push(['Periodo de formación', `${fmtDia(doc.fechaInicio)} al ${fmtDia(doc.fechaFin)}`]);
+      }
+      filas.push(['Fecha de Expedición', fmtDia(doc.fechaExpedicion)]);
+      if (doc.fechaVencimiento) {
+        filas.push(['Vencimiento', `<span class="text-red-600 font-medium">${fmtDia(doc.fechaVencimiento)}</span>`]);
+      }
+
+      const legalNote = doc.plantilla === 'alimentos' ? `
+        <div class="px-4 py-2 bg-[#f0f4f2] border-t border-gray-300 text-[11px] text-[#3c7657] font-medium leading-relaxed">
+          Resolución 2674/2013 — Decreto 3075/1997. Certificado con validez nacional en Colombia.
+        </div>` : `
+        <div class="px-4 py-2 bg-[#f0f4f2] border-t border-gray-300 text-[11px] text-[#3c7657] font-medium leading-relaxed">
+          Decreto 1075 de 2015. Registrado en el libro de constancias de Alianza Capacitarte con folio ${esc(doc.codigo)}.
+        </div>`;
+
+      return `
+        <div class="border border-gray-300 bg-white shadow-sm page-break">
+          <div class="bg-gray-100 px-4 py-2 border-b border-gray-300 flex items-center justify-between">
+            <span class="text-xs font-bold text-gray-700 uppercase">Documento Verificado</span>
+            ${badgeEstado(doc)}
+          </div>
+          <div class="p-4 sm:p-6">
+            <h4 class="font-bold text-[#004e82] text-lg sm:text-xl mb-6">${esc(doc.curso || doc.tipo)}</h4>
+            <table class="w-full text-left text-sm text-gray-700 mb-2 border-collapse">
+              <tbody>
+                ${filas.map(([label, valor], i) => `
+                  <tr class="${i < filas.length - 1 ? 'border-b border-gray-100' : ''}">
+                    <td class="py-2.5 pr-4 font-semibold w-2/5 sm:w-1/3">${label}:</td>
+                    <td class="py-2.5">${valor}</td>
+                  </tr>`).join('')}
+              </tbody>
+            </table>
+            ${renderPlan(doc.curso || '', doc.intensidadHoraria || extractIntensity(doc.curso))}
+          </div>
+          ${legalNote}
+        </div>
+      `;
+    };
+
+    // Tabla resumida (consulta por cédula): todos los documentos con código.
+    const renderDocumentosEmitidos = (docs) => {
+      if (!docs.length) return '';
+      return `
+        <div class="mt-8 page-break">
+          <div class="mb-4 text-sm text-gray-700 font-bold border-b border-gray-200 pb-2">
+            Documentos con código de verificación: <span class="text-[#004e82]">${docs.length}</span>
+          </div>
+          <div class="overflow-x-auto border border-gray-300">
+            <table class="w-full text-left text-[13px] text-gray-700 border-collapse">
+              <thead class="bg-gray-100 text-[11px] uppercase text-gray-600">
+                <tr>
+                  <th class="px-3 py-2">Código</th>
+                  <th class="px-3 py-2">Documento</th>
+                  <th class="px-3 py-2">Expedición</th>
+                  <th class="px-3 py-2">Vencimiento</th>
+                  <th class="px-3 py-2">Estado</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${docs.map(d => `
+                  <tr class="border-t border-gray-200 align-top">
+                    <td class="px-3 py-2 font-mono font-bold text-[#004e82] whitespace-nowrap">${esc(d.codigo)}</td>
+                    <td class="px-3 py-2">
+                      <div class="font-semibold">${esc(d.curso || d.tipo)}</div>
+                      <div class="text-[11px] text-gray-500">${esc(d.tipo)}</div>
+                    </td>
+                    <td class="px-3 py-2 whitespace-nowrap">${fmtDia(d.fechaExpedicion)}</td>
+                    <td class="px-3 py-2 whitespace-nowrap">${d.fechaVencimiento ? fmtDia(d.fechaVencimiento) : '—'}</td>
+                    <td class="px-3 py-2">${badgeEstado(d)}</td>
+                  </tr>`).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    };
+
+    const sellarConsulta = () => {
+      document.getElementById('consulta-fecha').textContent =
+        new Date().toLocaleString('es-CO', {
+          day: '2-digit', month: 'long', year: 'numeric',
+          hour: '2-digit', minute: '2-digit'
+        });
+    };
+
+    const mostrarResultados = () => {
+      lucide.createIcons();
+      searchSection.style.display = 'none';
+      resultsSection.style.display = 'block';
+    };
+
+    // Resultado de la consulta por código: un único documento.
+    const renderDocumentoVerificado = (doc) => {
+      currentStudentData = null;
+      document.getElementById('student-name').textContent = doc.nombre || 'Usuario Encontrado';
+      document.getElementById('student-doc-type').textContent = doc.tipoDocumento || 'C.C.';
+      document.getElementById('student-doc-num').textContent = doc.numeroDocumento;
+      const estado = document.getElementById('student-estado');
+      estado.textContent = estaVencido(doc) ? 'Documento auténtico - Vencido' : 'Documento auténtico - Vigente';
+      estado.className = `sm:w-3/4 p-3 bg-[#f8faf9] font-bold ${estaVencido(doc) ? 'text-red-600' : 'text-green-700'}`;
+      sellarConsulta();
+
+      document.getElementById('courses-block').style.display = 'none';
+      document.getElementById('docs-emitidos-container').innerHTML = renderDocumentoCard(doc);
+      mostrarResultados();
+    };
+
+    const verificarCodigo = async (valor) => {
+      const codigo = normalizarCodigo(valor);
+      if (!codigo) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Código Inválido',
+          text: 'El código de verificación tiene 8 caracteres (ej. 7K3M-9Q2X). Lo encuentra debajo del QR de su documento.',
+          confirmButtonColor: '#0c8dac'
+        });
+        return;
+      }
+
+      setBtnLoading(true);
+      try {
+        renderDocumentoVerificado(await getDocumentoPorCodigo(codigo));
+      } catch (err) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Sin Resultados',
+          text: err.message === 'NOT_FOUND'
+            ? `El código ${codigo} no corresponde a ningún documento emitido por Alianza Capacitarte.`
+            : 'No fue posible conectarse con el servidor. Intenta nuevamente.',
+          confirmButtonColor: '#002e7d'
+        });
+      } finally {
+        setBtnLoading(false);
+      }
+    };
+
     let currentStudentData = null;
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
+      if (esModoCodigo()) return verificarCodigo(input.value);
+
       const cedula = input.value.trim();
-      
+
       if (cedula.length < 5) {
         Swal.fire({
           icon: 'warning',
@@ -610,19 +856,40 @@
       setBtnLoading(true);
 
       try {
-        const data = await getClientByCedula(cedula);
-        
+        // Cursos del cliente (controla) y documentos con código (andesback) en
+        // paralelo. Una persona puede tener solo uno de los dos: p. ej. un diploma
+        // generado desde el módulo de Generación sin venta registrada.
+        const [cliente, docs] = await Promise.all([
+          getClientByCedula(cedula).then(data => ({ data }), err => ({ err })),
+          getDocumentosPorNumero(cedula),
+        ]);
+
+        let data = cliente.data;
         if (!data || (!data.numeroDeDocumento && !data.numero_documento && !data.documento)) {
-          throw new Error('NOT_FOUND');
+          data = null;
         }
 
-        // Normalizar numeroDeDocumento
-        if (!data.numeroDeDocumento) {
-            data.numeroDeDocumento = data.numero_documento || data.documento || cedula;
+        if (!data && docs.length === 0) {
+          throw cliente.err && cliente.err.message === 'SERVER_ERROR' ? cliente.err : new Error('NOT_FOUND');
         }
 
-        currentStudentData = data;
-        renderResults(data);
+        if (data) {
+          // Normalizar numeroDeDocumento
+          if (!data.numeroDeDocumento) {
+              data.numeroDeDocumento = data.numero_documento || data.documento || cedula;
+          }
+          currentStudentData = data;
+        } else {
+          currentStudentData = null;
+          data = {
+            nombre: docs[0].nombre,
+            tipoDeDocumento: docs[0].tipoDocumento,
+            numeroDeDocumento: docs[0].numeroDocumento,
+            soloDocumentos: true,
+          };
+        }
+
+        renderResults(data, docs);
 
       } catch (err) {
         let msg = 'No fue posible conectarse con el servidor. Intenta nuevamente.';
@@ -647,30 +914,48 @@
       window.print();
     });
 
+    // Al escanear el QR la página abre con ?codigo=XXXX-XXXX: se verifica sola.
+    const codigoUrl = new URLSearchParams(window.location.search).get('codigo');
+    if (codigoUrl) {
+      modoSelect.value = 'codigo';
+      aplicarModo();
+      input.value = codigoUrl.toUpperCase();
+      verificarCodigo(codigoUrl);
+    }
+
     document.getElementById('btn-new-search').addEventListener('click', () => {
       input.value = '';
       currentStudentData = null;
+      // Quita el ?codigo= de la URL para que recargar no repita la consulta.
+      if (codigoUrl) history.replaceState(null, '', window.location.pathname);
       resultsSection.style.display = 'none';
       searchSection.style.display = 'block';
       setTimeout(() => input.focus(), 100);
     });
 
-    const renderResults = (data) => {
+    const renderResults = (data, docs = []) => {
       const { nombre, apellido, tipoDeDocumento, tipoDocumento, tipo_documento, numeroDeDocumento, tipo, createdAt, fechaVencimiento } = data;
-      
+
       const docType = tipoDeDocumento || tipoDocumento || tipo_documento || 'C.C.';
       const fullName = `${nombre || ''} ${apellido || ''}`.trim();
-      
+
       document.getElementById('student-name').textContent = fullName || 'Usuario Encontrado';
       document.getElementById('student-doc-type').textContent = docType;
       document.getElementById('student-doc-num').textContent = numeroDeDocumento;
-      
+      const estado = document.getElementById('student-estado');
+      estado.textContent = 'Activo - Verificado';
+      estado.className = 'sm:w-3/4 p-3 bg-[#f8faf9] text-green-700 font-bold';
+
       // Sello de trazabilidad de la consulta (útil para la autoridad sanitaria)
-      document.getElementById('consulta-fecha').textContent =
-        new Date().toLocaleString('es-CO', {
-          day: '2-digit', month: 'long', year: 'numeric',
-          hour: '2-digit', minute: '2-digit'
-        });
+      sellarConsulta();
+
+      // Diplomas, certificados y carnets emitidos con código de verificación.
+      document.getElementById('docs-emitidos-container').innerHTML = renderDocumentosEmitidos(docs);
+      document.getElementById('courses-block').style.display = data.soloDocumentos ? 'none' : '';
+      if (data.soloDocumentos) {
+        mostrarResultados();
+        return;
+      }
 
       const cursosArr = Array.isArray(tipo) ? tipo : (tipo ? [tipo] : []);
       document.getElementById('cert-count').textContent = cursosArr.length;
